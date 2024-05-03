@@ -32,6 +32,24 @@ class Ventana():
         
         return int((Largo * Porcentaje) / 100)
     
+    def obtenerAnchoWidget(self, Widget, Porcentaje, Ancho = None):
+        
+        if(Ancho == None):
+
+            Ancho = Widget.winfo_reqwidth()
+            return int((Ancho * Porcentaje) / 100)
+        
+        return int((Ancho * Porcentaje) / 100)
+    
+    def obtenerLargoWidget(self, Widget, Porcentaje, Largo = None):
+        
+        if(Largo == None):
+
+            Largo = Widget.winfo_reqheight()
+            return int((Largo * Porcentaje) / 100)
+        
+        return int((Largo * Porcentaje) / 100)
+
     def establecerFrames(self, Ventana):
 
         Ventana.columnconfigure(0, weight = 1)
@@ -46,10 +64,27 @@ class Ventana():
 
         segundoFrame = CTkFrame(master=Ventana, fg_color="green", 
                                width = self.obtenerAncho(Ventana, 100, self.Ancho),
-                               height = self.obtenerLargo(Ventana, 70, self.Largo))
+                               height = self.obtenerLargo(Ventana, 65, self.Largo))
         segundoFrame.grid(row = 1, column = 0, sticky="nswe")
 
+        #SubWidgets
+
+        segundoFrame.columnconfigure(0, weight=1)
+        segundoFrame.columnconfigure(1, weight=1)
+        segundoFrame.rowconfigure(0, weight=1)
+        segundoFrame.update()
+        
+        segundoPrimerFrame = CTkFrame(master=segundoFrame, fg_color="black", 
+                               width = self.obtenerAnchoWidget(segundoFrame, 30),
+                               height = self.obtenerLargoWidget(segundoFrame, 100))
+        segundoPrimerFrame.grid(row = 0, column = 0, sticky="nswe")
+
+        segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color="white", 
+                               width = self.obtenerAnchoWidget(segundoFrame, 70),
+                               height = self.obtenerLargoWidget(segundoFrame, 100))
+        segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
+    
         tercerFrame = CTkFrame(master=Ventana, fg_color="blue", 
                                width = self.obtenerAncho(Ventana, 100, self.Ancho),
-                               height = self.obtenerLargo(Ventana, 25, self.Largo))
+                               height = self.obtenerLargo(Ventana, 30, self.Largo))
         tercerFrame.grid(row = 2, column = 0, sticky="nswe")
