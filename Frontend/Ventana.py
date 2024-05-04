@@ -11,7 +11,7 @@ class Ventana():
         self.Loggin = False
         self.colorFondo = '#373739'
         self.primerGris = "#19191a"
-        self.segundoGris = "#020202"
+        self.segundoGris = "#19191a"
 
         app.geometry(f"{self.Ancho}x{self.Largo}")
 
@@ -66,7 +66,7 @@ class Ventana():
 
         primerFrame = CTkFrame(master=Ventana, fg_color= self.primerGris, 
                                width = self.obtenerAncho(Ventana, 100, self.Ancho),
-                               height = self.obtenerLargo(Ventana, 5, self.Largo))
+                               height = self.obtenerLargo(Ventana, 5, self.Largo),)
         primerFrame.grid(row = 0, column = 0, sticky="nswe")
 
         self.establecerNavegacion(primerFrame)
@@ -81,28 +81,59 @@ class Ventana():
         #SubWidgets del Segundo Widget Principal
 
         segundoFrame.columnconfigure(0, weight=1)
-        segundoFrame.columnconfigure(1, weight=1)
+        segundoFrame.columnconfigure(1, weight=0)
+        segundoFrame.columnconfigure(2, weight=1)
         segundoFrame.rowconfigure(0, weight=1)
         segundoFrame.update()
         
         segundoPrimerFrame = CTkFrame(master=segundoFrame, fg_color= self.primerGris, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 25),
+                               width = self.obtenerAnchoWidget(segundoFrame, 24),
                                height = self.obtenerLargoWidget(segundoFrame, 100),
                                corner_radius=0)
         segundoPrimerFrame.grid(row = 0, column = 0, sticky="nswe")
 
-        segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 75),
+        """"
+
+        segundoPrimerBorde = CTkFrame(master=segundoFrame, fg_color= self.primerGris, 
+                               width = self.obtenerAnchoWidget(None, 100, 2),
                                height = self.obtenerLargoWidget(segundoFrame, 100),
-                               corner_radius=0)
-        segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
+                               corner_radius=0,
+                               border_color="White",
+                               border_width= 1)
+        segundoPrimerBorde.grid(row = 0, column = 1, sticky="nswe")
+
+        """
+
+        segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
+                               width = self.obtenerAnchoWidget(segundoFrame, 74),
+                               height = self.obtenerLargoWidget(segundoFrame, 100),
+                               corner_radius=0,)
+        segundoSegundoFrame.grid(row = 0, column = 2, sticky="nswe")
 
         #Tercer widget Principal
     
         tercerFrame = CTkFrame(master=Ventana, fg_color=self.segundoGris, 
                                width = self.obtenerAncho(Ventana, 100, self.Ancho),
-                               height = self.obtenerLargo(Ventana, 30, self.Largo))
+                               height = self.obtenerLargo(Ventana, 30, self.Largo),
+                               corner_radius = 0,
+                               border_color="White",
+                               border_width= 1,)
         tercerFrame.grid(row = 2, column = 0, sticky="nswe")
+
+        tercerFrame.columnconfigure(0, weight=1)
+        tercerFrame.rowconfigure(0, weight=1)
+
+        cajaComandos = CTkTextbox(master=tercerFrame,
+                                  width = self.obtenerAnchoWidget(tercerFrame, 100),
+                                  height = self.obtenerLargoWidget(tercerFrame, 100),
+                                  text_color = "White",
+                                  font=("consolas", 15))
+        
+        cajaComandos.grid(row = 0, column = 0, sticky = "nsew")
+        
+        cajaComandos.insert("0.0", "SGDB Jalisco [Version 1.0]\n\n")
+        cajaComandos.insert("3.0", "¡Hola Bienvenido! Escribe /help\n\n")
+        cajaComandos.insert("5.0", "Usuario> ")
 
     def establecerNavegacion(self, Frame):
         
