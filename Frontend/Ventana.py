@@ -8,6 +8,10 @@ class Ventana():
         app = CTk()
         self.Ancho = self.obtenerAncho(app, 60)
         self.Largo = self.obtenerLargo(app, 60)
+        self.Loggin = False
+        self.colorFondo = '#373739'
+        self.primerGris = "#19191a"
+        self.segundoGris = "#020202"
 
         app.geometry(f"{self.Ancho}x{self.Largo}")
 
@@ -60,7 +64,7 @@ class Ventana():
 
         #Primer Widget Principal
 
-        primerFrame = CTkFrame(master=Ventana, fg_color="red", 
+        primerFrame = CTkFrame(master=Ventana, fg_color= self.primerGris, 
                                width = self.obtenerAncho(Ventana, 100, self.Ancho),
                                height = self.obtenerLargo(Ventana, 5, self.Largo))
         primerFrame.grid(row = 0, column = 0, sticky="nswe")
@@ -69,7 +73,7 @@ class Ventana():
 
         #Segundo Widget Principal
 
-        segundoFrame = CTkFrame(master=Ventana, fg_color="green", 
+        segundoFrame = CTkFrame(master=Ventana, fg_color= self.colorFondo, 
                                width = self.obtenerAncho(Ventana, 100, self.Ancho),
                                height = self.obtenerLargo(Ventana, 65, self.Largo))
         segundoFrame.grid(row = 1, column = 0, sticky="nswe")
@@ -81,19 +85,21 @@ class Ventana():
         segundoFrame.rowconfigure(0, weight=1)
         segundoFrame.update()
         
-        segundoPrimerFrame = CTkFrame(master=segundoFrame, fg_color="black", 
+        segundoPrimerFrame = CTkFrame(master=segundoFrame, fg_color= self.primerGris, 
                                width = self.obtenerAnchoWidget(segundoFrame, 25),
-                               height = self.obtenerLargoWidget(segundoFrame, 100))
+                               height = self.obtenerLargoWidget(segundoFrame, 100),
+                               corner_radius=0)
         segundoPrimerFrame.grid(row = 0, column = 0, sticky="nswe")
 
-        segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color="white", 
+        segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
                                width = self.obtenerAnchoWidget(segundoFrame, 75),
-                               height = self.obtenerLargoWidget(segundoFrame, 100))
+                               height = self.obtenerLargoWidget(segundoFrame, 100),
+                               corner_radius=0)
         segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
 
         #Tercer widget Principal
     
-        tercerFrame = CTkFrame(master=Ventana, fg_color="blue", 
+        tercerFrame = CTkFrame(master=Ventana, fg_color=self.segundoGris, 
                                width = self.obtenerAncho(Ventana, 100, self.Ancho),
                                height = self.obtenerLargo(Ventana, 30, self.Largo))
         tercerFrame.grid(row = 2, column = 0, sticky="nswe")
@@ -102,16 +108,16 @@ class Ventana():
         
        Frame.rowconfigure(0, weight=0)
        Frame.columnconfigure(0, weight=0)
-       Frame.columnconfigure(1, weight=0)
-       Frame.columnconfigure(2, weight=0)
+       Frame.columnconfigure(1, weight=1)
+       Frame.columnconfigure(2, weight=1)
 
        valores = ["Opciones", "Diagramas", "Regresiones", "Intervalos Confianza", "Importar", "Exportar" , "Salir"]
 
        primerAjuste = CTkOptionMenu(Frame, values=valores, corner_radius=0, command=lambda selection: self.opcionesMenu(selection))
        primerAjuste.grid(row = 0, column = 0, sticky = "e")
 
-       Usuario = CTkLabel(Frame, text="Usuario   ")
-       Usuario.grid(row=0, column=1, sticky = "e")
+       Usuario = CTkLabel(Frame, text="Usuario   ", anchor="e")
+       Usuario.grid(row=0, column=1, sticky = "ew")
 
        loggin = CTkButton(Frame, text="Loggin", corner_radius=0)
        loggin.grid(row=0, column=2, sticky = "e")
