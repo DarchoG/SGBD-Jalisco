@@ -13,8 +13,11 @@ class Ventana():
         self.colorFondo = '#373739'
         self.primerGris = "#19191a"
         self.segundoGris = "#19191a"
+        self.textoGris = "#c6c6c6"
+        self.posicionComandos = 1
 
         app.geometry(f"{self.Ancho}x{self.Largo}")
+        app.title("SGBD Jalisco")
 
         self.establecerFrames(app)
 
@@ -89,18 +92,21 @@ class Ventana():
         #Barra Lateral Izquierda
         
         segundoPrimerFrame = CTkFrame(master=segundoFrame, fg_color= self.primerGris, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 24),
+                               width = self.obtenerAnchoWidget(segundoFrame, 25),
                                height = self.obtenerLargoWidget(segundoFrame, 100),
                                corner_radius=0)
         segundoPrimerFrame.grid(row = 0, column = 0, sticky="nswe")
 
+        self.listasDatos(segundoPrimerFrame)
+
         #Segemento Derecho (Display)
 
         segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 74),
+                               width = self.obtenerAnchoWidget(segundoFrame, 75),
                                height = self.obtenerLargoWidget(segundoFrame, 100),
                                corner_radius=0,)
         segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
+        print(segundoSegundoFrame)
 
         self.graficoPredeterminado(segundoSegundoFrame)
 
@@ -136,27 +142,55 @@ class Ventana():
        loggin = CTkButton(Frame, text="Loggin", corner_radius=0)
        loggin.grid(row=0, column=2, sticky = "e")
 
+    def listasDatos(self, Frame):
+
+        Frame.rowconfigure(0, weight = 1)
+        Frame.rowconfigure(1, weight = 1)
+        Frame.columnconfigure(0, weight = 1)  
+
+        Imagen = CTkImage(light_image=Image.open("Imagenes/basesDatos.png"),
+                          dark_image=Image.open("Imagenes/basesDatos.png"),
+                          size = (16, 16))
+        
+
+        Texto = CTkLabel(master = Frame,
+                                         text = "  Lista Datos  ",
+                                         text_color = self.textoGris,   
+                                         corner_radius = 0, 
+                                         width = self.obtenerAnchoWidget(Frame, 100),
+                                         height = self.obtenerLargoWidget(Frame, 10),
+                                         image=Imagen,
+                                         compound = "left",
+                                        )
+        
+
+        Texto.grid(row = 0, column = 0,  sticky="new") 
+
     def graficoPredeterminado(self, Frame):
 
-        Frame.rowconfigure(0, weight = 0)
-        Frame.rowconfigure(1, weight = 0)
-        Frame.columnconfigure(0, weight = 0)
+        print(Frame)
+
+        Frame.rowconfigure(0, weight = 1)
+        Frame.rowconfigure(1, weight = 1)
+        Frame.columnconfigure(0, weight = 1)
         Frame.update()
 
         Imagen = CTkImage(light_image=Image.open("Imagenes/Stock.png"),
                           dark_image=Image.open("Imagenes/Stock.png"),
                           size = (100, 100))
         
-        imagenLabel = CTkLabel(master = Frame, image=Imagen, text = "", bg_color="blue")
+        imagenLabel = CTkLabel(master = Frame, image=Imagen, text = "")
 
-        #imagenLabel.grid(row = 0, column = 0,  sticky="nsew")
+        imagenLabel.grid(row = 0, column = 0,  sticky="nsew")
 
         Texto = CTkLabel(master = Frame,
                                          text = "Selecciona el menu de opciones o interactua con la terminal para analizar datos.",
-                                         corner_radius = 0, bg_color="red"
+                                         text_color = self.textoGris,   
+                                         corner_radius = 0, 
+                                         justify = "right"
                                         )
 
-        #Texto.grid(row = 1, column = 0,  sticky="nsew")
+        Texto.grid(row = 1, column = 0,  sticky="new")
    
     def terminal(self, Frame):
                  
@@ -168,9 +202,40 @@ class Ventana():
         
         cajaComandos.grid(row = 0, column = 0, sticky = "nsew")
         
-        cajaComandos.insert("0.0", "SGDB Jalisco [Version 1.0]\n\n")
+        cajaComandos.insert("1.0", "SGDB Jalisco [Version 1.0]\n\n")
         cajaComandos.insert("3.0", "¡Hola Bienvenido! Escribe /help\n\n")
-        cajaComandos.insert("5.0", "Usuario> ")
+        cajaComandos.insert("5.0", "Usuario>")
+
+        self.posicionComandos = 5
+
+        cajaComandos.bind("<Return>", lambda event: self.Enter(event, cajaComandos))
+
+    def Enter(self, event, cajaComandos):
+
+        comando = cajaComandos.get(f"{self.posicionComandos}.8", "end-1c")
+        self.ejecutarComando(cajaComandos, comando)
+
+        cajaComandos.insert(f"{self.posicionComandos}.0", "\nUsuario>")
+        cajaComandos.mark_set("insert", f"{self.posicionComandos}.9")
+
+    def ejecutarComando(self, cajaComandos, comando):
+
+        print(comando)
+        print(self.posicionComandos)
+
+        if(comando == "cls"):
+
+            cajaComandos.delete("1.0", "end")
+            self.posicionComandos = 1
+
+        else:
+            
+            self.posicionComandos += 2
+            cajaComandos.insert(f"{self.posicionComandos}.0", "\nComando '{}' no reconocido.".format(comando))
+
+    def loggin(sel, Farme):
+
+        pass      
 
     def opcionesMenu(self, opcion):
         
@@ -201,3 +266,6 @@ class Ventana():
         else:
 
             print("Caso no Definido")               
+
+if __name__ == "__main__":
+    ventana_principal = Ventana()            
