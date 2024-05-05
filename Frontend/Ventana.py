@@ -11,14 +11,34 @@ class Ventana():
         self.Ancho = self.obtenerAncho(app, 60)
         self.Largo = self.obtenerLargo(app, 60)
         self.Loggin = False
+        
+        app.geometry(f"{self.Ancho}x{self.Largo}")
+        app.title("SGBD Jalisco")
+
+        #Paleta de Colores
+
         self.colorFondo = '#373739'
         self.primerGris = "#19191a"
         self.segundoGris = "#19191a"
         self.textoGris = "#c6c6c6"
         self.posicionComandos = 1
 
-        app.geometry(f"{self.Ancho}x{self.Largo}")
-        app.title("SGBD Jalisco")
+        #Dimensiones de mis Contenedores
+
+        self.primerFrameAncho = None
+        self.primerFrameLargo = None
+
+        self.segundoFrameAncho = None
+        self.segundoFrameLargo = None
+
+        self.segundoPrimerFrameAncho = None
+        self.segundoPrimerFrameLargo = None
+
+        self.segundoSegundoFrameAncho = None
+        self.segundoSegundoFrameLargo = None
+
+        self.tercerFrameAncho = None
+        self.tercerFrameLargo = None
 
         self.establecerFrames(app)
 
@@ -69,18 +89,24 @@ class Ventana():
 
         #Primer Widget Principal
 
+        self.primerFrameAncho = self.obtenerAncho(Ventana, 100, self.Ancho)
+        self.primerFrameLargo = self.obtenerLargo(Ventana, 5, self.Largo)
+
         primerFrame = CTkFrame(master=Ventana, fg_color= self.primerGris, 
-                               width = self.obtenerAncho(Ventana, 100, self.Ancho),
-                               height = self.obtenerLargo(Ventana, 5, self.Largo),)
+                               width = self.primerFrameAncho,
+                               height = self.primerFrameLargo)
         primerFrame.grid(row = 0, column = 0, sticky="nswe")
 
         self.establecerNavegacion(primerFrame)
 
+        self.segundoFrameAncho = self.obtenerAncho(Ventana, 100, self.Ancho)
+        self.segundoFrameLargo = self.obtenerLargo(Ventana, 60, self.Largo)
+
         #Segundo Widget Principal
 
         segundoFrame = CTkFrame(master=Ventana, fg_color= self.colorFondo, 
-                               width = self.obtenerAncho(Ventana, 100, self.Ancho),
-                               height = self.obtenerLargo(Ventana, 65, self.Largo))
+                               width =  self.segundoFrameAncho,
+                               height = self.segundoFrameLargo)
         segundoFrame.grid(row = 1, column = 0, sticky="nswe")
 
         #SubWidgets del Segundo Widget Principal
@@ -90,31 +116,42 @@ class Ventana():
         segundoFrame.rowconfigure(0, weight=1)
 
         #Barra Lateral Izquierda
+
+        self.segundoPrimerFrameAncho = self.obtenerAnchoWidget(segundoFrame, 30)
+        self.segundoPrimerFrameLargo = self.obtenerLargoWidget(segundoFrame, 100)
         
         segundoPrimerFrame = CTkFrame(master=segundoFrame, fg_color= self.primerGris, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 30),
-                               height = self.obtenerLargoWidget(segundoFrame, 100),
+                               width = self.segundoPrimerFrameAncho,
+                               height = self.segundoPrimerFrameLargo,
                                corner_radius=0)
         segundoPrimerFrame.grid(row = 0, column = 0, sticky="nswe")
+
+        #segundoPrimerFrame.grid_propagate(False) 
 
         self.listasDatos(segundoPrimerFrame)
 
         #Segemento Derecho (Display)
+        
+        self.segundoSegundoFrameAncho = self.obtenerAnchoWidget(segundoFrame, 70)
+        self.segundoSegundoFrameLargo = self.obtenerLargoWidget(segundoFrame, 100)
 
         segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 70),
-                               height = self.obtenerLargoWidget(segundoFrame, 100),
+                               width = self.segundoSegundoFrameAncho,
+                               height = self.segundoSegundoFrameLargo,
                                corner_radius=0)
         segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
-        print(segundoSegundoFrame)
+        #segundoSegundoFrame.grid_propagate(False) 
 
         self.graficoPredeterminado(segundoSegundoFrame)
 
         #Tercer widget Principal
+
+        self.tercerFrameAncho = self.obtenerAncho(Ventana, 100, self.Ancho)
+        self.tercerFrameLargo = self.obtenerLargo(Ventana, 35, self.Largo)
     
         tercerFrame = CTkFrame(master=Ventana, fg_color=self.segundoGris, 
-                               width = self.obtenerAncho(Ventana, 100, self.Ancho),
-                               height = self.obtenerLargo(Ventana, 30, self.Largo),
+                               width =  self.tercerFrameAncho,
+                               height = self.tercerFrameLargo,
                                corner_radius = 0,
                                border_color="White",
                                border_width= 1,)
@@ -157,8 +194,8 @@ class Ventana():
                                          text = "  Lista Datos  ",
                                          text_color = self.textoGris,   
                                          corner_radius = 0, 
-                                         width = self.obtenerAnchoWidget(Frame, 100),
-                                         height = self.obtenerLargoWidget(Frame, 10),
+                                         width = self.obtenerAnchoWidget(Frame, 100, self.segundoPrimerFrameAncho),
+                                         height = self.obtenerLargoWidget(Frame, 10, self.segundoPrimerFrameLargo),
                                          image=Imagen,
                                          compound = "left",
                                         )
@@ -171,59 +208,30 @@ class Ventana():
         print(Frame)
 
         Frame.rowconfigure(0, weight = 1)
-        Frame.rowconfigure(1, weight = 1)
         Frame.columnconfigure(0, weight = 1)
 
         Imagen = CTkImage(light_image = Image.open("Imagenes/Stock.png"), 
                           dark_image = Image.open("Imagenes/Stock.png"),
                           size=(self.obtenerLargoWidget(Frame, 50), self.obtenerLargoWidget(Frame, 50)))
-
-        imagenLabel = CTkLabel(master=Frame, image=Imagen, text="")
-        imagenLabel.grid(row=0, column=0, sticky="nsew")
-
-        '''
-
-        imagen_path = "Imagenes/Stock.png"
-        imagen = Image.open(imagen_path)
-        imagen = ImageTk.PhotoImage(imagen)
         
-        imagenLabel = CTkLabel(master=Frame, image=imagen, text="",
-                               width = self.obtenerAnchoWidget(Frame, 100),
-                               height = self.obtenerLargoWidget(Frame, 100))
-        imagenLabel.image = imagen  # Esta línea es importante para evitar que la imagen se recolecte como basura
-        imagenLabel.grid(row=0, column=0, sticky="nsew")
-
-        '''
-
-        '''
-        imagen_path = "Imagenes/Stock.png"
-        imagen = Image.open(imagen_path)
-        ancho_frame = Frame.winfo_width()
-        alto_frame = Frame.winfo_height()
-        imagen = imagen.resize((ancho_frame, alto_frame))
-        imagen = ImageTk.PhotoImage(imagen)
-        
-        imagenLabel = CTkLabel(master=Frame, image=imagen, text="")
-        imagenLabel.image = imagen  # Esta línea es importante para evitar que la imagen se recolecte como basura
-        imagenLabel.grid(row=0, column=0, sticky="nsew")
-
-        '''
         Texto = CTkLabel(master = Frame,
                                          text = "Selecciona el menu de opciones o interactua con la terminal para analizar datos.",
                                          text_color = self.textoGris,   
                                          corner_radius = 0, 
-                                         width = self.obtenerAnchoWidget(Frame, 100),
-                                         height = self.obtenerLargoWidget(Frame, 25),
-                                         wraplength = self.obtenerAnchoWidget(Frame, 100)
+                                         width = self.obtenerAnchoWidget(Frame, 100, self.segundoSegundoFrameAncho),
+                                         height = self.obtenerLargoWidget(Frame, 100, self.segundoSegundoFrameLargo),
+                                         wraplength = self.obtenerAnchoWidget(Frame, 100),
+                                         image=Imagen,
+                                         compound = "top"
                                         )
 
-        Texto.grid(row = 1, column = 0,  sticky="new")
+        Texto.grid(row = 0, column = 0,  sticky="nswe")
    
     def terminal(self, Frame):
                  
         cajaComandos = CTkTextbox(master=Frame,
-                                  width = self.obtenerAnchoWidget(Frame, 100),
-                                  height = self.obtenerLargoWidget(Frame, 100),
+                                  width = self.obtenerAnchoWidget(Frame, 100, self.tercerFrameAncho),
+                                  height = self.obtenerLargoWidget(Frame, 100, self.tercerFrameLargo),
                                   text_color = "White",
                                   font=("consolas", 15))
         
