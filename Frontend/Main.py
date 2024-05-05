@@ -1,3 +1,0 @@
-import Ventana
-
-Ventana.Ventana()
