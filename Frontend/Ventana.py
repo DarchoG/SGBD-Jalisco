@@ -1,5 +1,6 @@
 from customtkinter import *
-from PIL import Image
+from tkinter import *
+from PIL import Image, ImageTk
 import sys  
 
 class Ventana():
@@ -37,27 +38,27 @@ class Ventana():
         if(Largo == None):
 
             Largo = Ventana.winfo_screenheight()
-            return int((Largo * Porcentaje) / 100)
+            return (Largo * Porcentaje) // 100
         
-        return int((Largo * Porcentaje) / 100)
+        return (Largo * Porcentaje) // 100
     
     def obtenerAnchoWidget(self, Widget, Porcentaje, Ancho = None):
         
         if(Ancho == None):
 
             Ancho = Widget.winfo_reqwidth()
-            return int((Ancho * Porcentaje) / 100)
+            return (Ancho * Porcentaje) // 100
         
-        return int((Ancho * Porcentaje) / 100)
+        return (Ancho * Porcentaje) // 100
     
     def obtenerLargoWidget(self, Widget, Porcentaje, Largo = None):
         
         if(Largo == None):
 
             Largo = Widget.winfo_reqheight()
-            return int((Largo * Porcentaje) / 100)
+            return (Largo * Porcentaje) // 100
         
-        return int((Largo * Porcentaje) / 100)
+        return (Largo * Porcentaje) // 100
 
     def establecerFrames(self, Ventana):
 
@@ -87,12 +88,11 @@ class Ventana():
         segundoFrame.columnconfigure(0, weight=1)
         segundoFrame.columnconfigure(1, weight=1)
         segundoFrame.rowconfigure(0, weight=1)
-        segundoFrame.update()
 
         #Barra Lateral Izquierda
         
         segundoPrimerFrame = CTkFrame(master=segundoFrame, fg_color= self.primerGris, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 25),
+                               width = self.obtenerAnchoWidget(segundoFrame, 30),
                                height = self.obtenerLargoWidget(segundoFrame, 100),
                                corner_radius=0)
         segundoPrimerFrame.grid(row = 0, column = 0, sticky="nswe")
@@ -102,9 +102,9 @@ class Ventana():
         #Segemento Derecho (Display)
 
         segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
-                               width = self.obtenerAnchoWidget(segundoFrame, 75),
+                               width = self.obtenerAnchoWidget(segundoFrame, 70),
                                height = self.obtenerLargoWidget(segundoFrame, 100),
-                               corner_radius=0,)
+                               corner_radius=0)
         segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
         print(segundoSegundoFrame)
 
@@ -146,7 +146,7 @@ class Ventana():
 
         Frame.rowconfigure(0, weight = 1)
         Frame.rowconfigure(1, weight = 1)
-        Frame.columnconfigure(0, weight = 1)  
+        Frame.columnconfigure(0, weight = 1) 
 
         Imagen = CTkImage(light_image=Image.open("Imagenes/basesDatos.png"),
                           dark_image=Image.open("Imagenes/basesDatos.png"),
@@ -173,21 +173,48 @@ class Ventana():
         Frame.rowconfigure(0, weight = 1)
         Frame.rowconfigure(1, weight = 1)
         Frame.columnconfigure(0, weight = 1)
-        Frame.update()
 
-        Imagen = CTkImage(light_image=Image.open("Imagenes/Stock.png"),
-                          dark_image=Image.open("Imagenes/Stock.png"),
-                          size = (100, 100))
+        Imagen = CTkImage(light_image = Image.open("Imagenes/Stock.png"), 
+                          dark_image = Image.open("Imagenes/Stock.png"),
+                          size=(self.obtenerLargoWidget(Frame, 50), self.obtenerLargoWidget(Frame, 50)))
+
+        imagenLabel = CTkLabel(master=Frame, image=Imagen, text="")
+        imagenLabel.grid(row=0, column=0, sticky="nsew")
+
+        '''
+
+        imagen_path = "Imagenes/Stock.png"
+        imagen = Image.open(imagen_path)
+        imagen = ImageTk.PhotoImage(imagen)
         
-        imagenLabel = CTkLabel(master = Frame, image=Imagen, text = "")
+        imagenLabel = CTkLabel(master=Frame, image=imagen, text="",
+                               width = self.obtenerAnchoWidget(Frame, 100),
+                               height = self.obtenerLargoWidget(Frame, 100))
+        imagenLabel.image = imagen  # Esta línea es importante para evitar que la imagen se recolecte como basura
+        imagenLabel.grid(row=0, column=0, sticky="nsew")
 
-        imagenLabel.grid(row = 0, column = 0,  sticky="nsew")
+        '''
 
+        '''
+        imagen_path = "Imagenes/Stock.png"
+        imagen = Image.open(imagen_path)
+        ancho_frame = Frame.winfo_width()
+        alto_frame = Frame.winfo_height()
+        imagen = imagen.resize((ancho_frame, alto_frame))
+        imagen = ImageTk.PhotoImage(imagen)
+        
+        imagenLabel = CTkLabel(master=Frame, image=imagen, text="")
+        imagenLabel.image = imagen  # Esta línea es importante para evitar que la imagen se recolecte como basura
+        imagenLabel.grid(row=0, column=0, sticky="nsew")
+
+        '''
         Texto = CTkLabel(master = Frame,
                                          text = "Selecciona el menu de opciones o interactua con la terminal para analizar datos.",
                                          text_color = self.textoGris,   
                                          corner_radius = 0, 
-                                         justify = "right"
+                                         width = self.obtenerAnchoWidget(Frame, 100),
+                                         height = self.obtenerLargoWidget(Frame, 25),
+                                         wraplength = self.obtenerAnchoWidget(Frame, 100)
                                         )
 
         Texto.grid(row = 1, column = 0,  sticky="new")
