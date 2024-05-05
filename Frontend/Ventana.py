@@ -203,35 +203,65 @@ class Ventana():
         cajaComandos.grid(row = 0, column = 0, sticky = "nsew")
         
         cajaComandos.insert("1.0", "SGDB Jalisco [Version 1.0]\n\n")
-        cajaComandos.insert("3.0", "¡Hola Bienvenido! Escribe /help\n\n")
-        cajaComandos.insert("5.0", "Usuario>")
+        cajaComandos.insert("3.0", "¡Hola Bienvenido! Escribe help\n\n")
+        cajaComandos.insert("5.0", "Usuario>\n")
 
-        self.posicionComandos = 5
+        self.posicionComandos = 6
 
         cajaComandos.bind("<Return>", lambda event: self.Enter(event, cajaComandos))
 
     def Enter(self, event, cajaComandos):
 
-        comando = cajaComandos.get(f"{self.posicionComandos}.8", "end-1c")
+        print(self.posicionComandos)
+        comando = cajaComandos.get(f"{self.posicionComandos}.0", "end-1c")
         self.ejecutarComando(cajaComandos, comando)
 
-        cajaComandos.insert(f"{self.posicionComandos}.0", "\nUsuario>")
-        cajaComandos.mark_set("insert", f"{self.posicionComandos}.9")
+        cajaComandos.insert(f"{self.posicionComandos}.0", "Usuario>")
+
+        #La caja de comandos responde despues del prompt del cursor, aun falta verificar si es posible mover el cursor hasta el termino del texto previo.
+
+        #cajaComandos.mark_set("insert", f"{self.posicionComandos}.9")
 
     def ejecutarComando(self, cajaComandos, comando):
 
         print(comando)
-        print(self.posicionComandos)
 
-        if(comando == "cls"):
+        comandosDisponibles = { "cls" : "Borra toda la terminal",
+                               "exit" : "Salir",
+                               "restart" : "Reiniciar",}
+
+        if(comando == "help"):
+
+            self.posicionComandos += 1
+
+            for comando, significado in comandosDisponibles.items():
+
+                self.posicionComandos += 1
+
+                cajaComandos.insert(f"{self.posicionComandos}.0", "\n{} : {}".format(comando, significado))
+
+            self.posicionComandos += 1  
+            cajaComandos.insert(f"{self.posicionComandos}.0", "\n\n")  
+            self.posicionComandos += 1  
+
+        elif(comando == "cls"):
 
             cajaComandos.delete("1.0", "end")
-            self.posicionComandos = 1
+            self.posicionComandos = 2
+
+        elif(comando == "exit"):
+
+            sys.exit()
+
+        elif(comando == "restart"):
+            
+            pass
 
         else:
             
-            self.posicionComandos += 2
-            cajaComandos.insert(f"{self.posicionComandos}.0", "\nComando '{}' no reconocido.".format(comando))
+            self.posicionComandos += 3
+            cajaComandos.insert(f"{self.posicionComandos}.0", "\nComando '{}' no reconocido.\n\n".format(comando))
+            self.posicionComandos += 1
 
     def loggin(sel, Farme):
 
