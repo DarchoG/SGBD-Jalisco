@@ -1,19 +1,20 @@
 from customtkinter import *
-from tkinter import *
 from PIL import Image, ImageTk
 import sys  
+
+import Loggin
 
 class Ventana():
 
     def __init__(self):
 
-        app = CTk()
-        self.Ancho = self.obtenerAncho(app, 60)
-        self.Largo = self.obtenerLargo(app, 60)
+        self.app = CTk()
+        self.Ancho = self.obtenerAncho(self.app, 60)
+        self.Largo = self.obtenerLargo(self.app, 60)
         self.Loggin = False
-        
-        app.geometry(f"{self.Ancho}x{self.Largo}")
-        app.title("SGBD Jalisco")
+
+        self.app.geometry(f"{self.Ancho}x{self.Largo}")
+        self.app.title("SGBD Jalisco")
 
         #Paleta de Colores
 
@@ -40,9 +41,9 @@ class Ventana():
         self.tercerFrameAncho = None
         self.tercerFrameLargo = None
 
-        self.establecerFrames(app)
+        self.establecerFrames(self.app)
 
-        app.mainloop()
+        self.app.mainloop()
 
     def obtenerAncho(self, Ventana, Porcentaje, Ancho = None):
 
@@ -176,7 +177,7 @@ class Ventana():
        Usuario = CTkLabel(Frame, text="Usuario   ", anchor="e")
        Usuario.grid(row=0, column=1, sticky = "ew")
 
-       loggin = CTkButton(Frame, text="Loggin", corner_radius=0)
+       loggin = CTkButton(Frame, text="Loggin", corner_radius=0, command = lambda : self.loggin(self.app))
        loggin.grid(row=0, column=2, sticky = "e")
 
     def listasDatos(self, Frame):
@@ -298,9 +299,9 @@ class Ventana():
             cajaComandos.insert(f"{self.posicionComandos}.0", "\nComando '{}' no reconocido.\n\n".format(comando))
             self.posicionComandos += 1
 
-    def loggin(sel, Farme):
+    def loggin(self, Ventana):
 
-        pass      
+        Loggin.Loggin(Ventana)
 
     def opcionesMenu(self, opcion):
         
