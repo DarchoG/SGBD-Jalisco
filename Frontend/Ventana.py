@@ -190,7 +190,6 @@ class Ventana():
                           dark_image=Image.open("Imagenes/basesDatos.png"),
                           size = (16, 16))
         
-
         Texto = CTkLabel(master = Frame,
                                          text = "  Lista Datos  ",
                                          text_color = self.textoGris,   
