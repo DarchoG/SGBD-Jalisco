@@ -6,7 +6,16 @@ class Loggin():
 
     def __init__(self, Ventana):
 
+        self.amarillo = "#ffd422"
+        self.azul = "#27438d"
+        self.colorFondo = '#19191a'
+        
+        self.logginAncho = self.obtenerAncho(Ventana, 50)
+        self.logginLargo = self.obtenerLargo(Ventana, 50)
+
         Ventana.rowconfigure(0, weight = 1)
+        Ventana.rowconfigure(1, weight = 0)
+        Ventana.rowconfigure(2, weight = 0)
         Ventana.columnconfigure(0, weight = 1)
         Ventana.columnconfigure(1, weight = 1)
 
@@ -15,31 +24,96 @@ class Loggin():
             if isinstance(widget, CTkFrame):
                 widget.destroy() 
 
+        self.establecerFrames(Ventana)
+
+    def obtenerAncho(self, Ventana, Proporcion, Ancho = None):
+
+        if(Ancho == None):
+
+            Ancho = Ventana.winfo_width()
+
+        return (Ancho * Proporcion) // 100
+        
+    def obtenerLargo(self, Ventana, Proporcion, Largo = None):
+
+        if (Largo == None):
+
+            Largo  = Ventana.winfo_height()
+
+        return (Largo * Proporcion) // 100
+    
+    def establecerFrames(self, Ventana):
+        
         primerLoggin = CTkFrame(master = Ventana,
-                                fg_color="Red",
-                                width = self.obtenerAncho(Ventana, 50),
-                                height = self.obtenerLargo(Ventana, 50),
-                                corner_radius = 0)
+                                fg_color= self.amarillo,
+                                width = self.logginAncho,
+                                height = self.logginLargo,
+                                corner_radius = 0,
+                               )
         
         primerLoggin.grid(row = 0, column = 0, sticky = "nsew")
 
+        self.establecerImagen(primerLoggin)
+
         segundoLoggin = CTkFrame(master = Ventana,
-                                fg_color="Blue",
-                                width = self.obtenerAncho(Ventana, 50),
-                                height = self.obtenerLargo(Ventana, 50),
+                                fg_color = self.colorFondo,
+                                width = self.logginAncho,
+                                height = self.logginLargo,
                                 corner_radius = 0)
         
         segundoLoggin.grid(row = 0, column = 1, sticky = "nsew")
 
-    def obtenerAncho(self, Ventana, Proporcion):
+        self.establecerLoggin(segundoLoggin)
 
-        Ancho = Ventana.winfo_width()
+    def establecerImagen(self, Frame):
 
-        return (Ancho * Proporcion) // 100
+        Frame.rowconfigure(0, weight = 1)
+        Frame.columnconfigure(0, weight = 1)
+
+        Imagen = Image.open("Imagenes/Loggin.png")
+
+        imagenAncho, imagenAlto = Imagen.size
+
+        imagenAlto = (imagenAlto * 40) // 100
+        imagenAncho = (imagenAncho * 40) // 100
+
+        ImagenFrame = CTkImage(light_image = Image.open("Imagenes/Loggin.png"), 
+                          dark_image = Image.open("Imagenes/Loggin.png"),
+                          size=(imagenAncho, imagenAlto)
+                          )
         
-    
-    def obtenerLargo(self, Ventana, Proporcion):
+        imagenContenedor = CTkLabel(master = Frame, text = "",
+                                    width = self.logginAncho,
+                                    height = self.logginLargo,
+                                    image = ImagenFrame, 
+                                    compound = "center")
+        
+        imagenContenedor.grid(row = 0, column = 0, sticky="nsew")
 
-        Largo  = Ventana.winfo_height()
+    def establecerLoggin(self, Frame):
 
-        return (Largo * Proporcion) // 100
+        Frame.rowconfigure(0, weight = 1)
+        Frame.rowconfigure(1, weight = 1)
+        Frame.columnconfigure(0, weight = 1)
+         
+        primerLogginAncho = self.obtenerAncho(Frame, 100, self.logginAncho)
+        primerLogginLargo = self.obtenerLargo(Frame, 30, self.logginLargo)
+
+        segundoLogginAncho = self.obtenerAncho(Frame, 100, self.logginAncho)
+        segundoLogginLargo = self.obtenerLargo(Frame, 70, self.logginLargo)
+
+        textoBienvenida = CTkFrame(master = Frame,
+                                    bg_color="green",
+                                    width = primerLogginAncho,
+                                    height = primerLogginLargo,
+                                    corner_radius = 0)
+
+        textoBienvenida.grid(row = 0, column = 0, sticky = "nsew")
+
+        formulario = CTkFrame(master = Frame,
+                              bg_color="blue",
+                              width = segundoLogginAncho,
+                              height = segundoLogginLargo,
+                              corner_radius = 0)
+        
+        formulario.grid(row = 1, column = 0, sticky = "nsew")
