@@ -103,17 +103,29 @@ class Loggin():
         segundoLogginLargo = self.obtenerLargo(Frame, 70, self.logginLargo)
 
         textoBienvenida = CTkFrame(master = Frame,
-                                    bg_color="green",
+                                    fg_color="green",
                                     width = primerLogginAncho,
                                     height = primerLogginLargo,
                                     corner_radius = 0)
 
         textoBienvenida.grid(row = 0, column = 0, sticky = "nsew")
 
+        self.incorporarBienvenida(textoBienvenida, primerLogginAncho, primerLogginLargo)
+
         formulario = CTkFrame(master = Frame,
-                              bg_color="blue",
+                              fg_color="blue",
                               width = segundoLogginAncho,
                               height = segundoLogginLargo,
                               corner_radius = 0)
-        
+                
         formulario.grid(row = 1, column = 0, sticky = "nsew")
+
+    def incorporarBienvenida(self, Frame, Ancho, Largo):
+
+        texto = CTkLabel(master = Frame,
+                        text = "texto",
+                        width = self.obtenerAncho(Frame, 50, Ancho),
+                        height = self.obtenerLargo(Frame, 50, Largo),
+                        bg_color="orange")
+        
+        texto.pack()
