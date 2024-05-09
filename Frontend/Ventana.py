@@ -22,6 +22,8 @@ class Ventana():
         self.primerGris = "#19191a"
         self.segundoGris = "#19191a"
         self.textoGris = "#c6c6c6"
+        self.amarillo = "#ffd422"
+        self.amarilloOscuro = "#d9b41c"
         self.posicionComandos = 1
 
         #Dimensiones de mis Contenedores
@@ -171,13 +173,24 @@ class Ventana():
 
        valores = ["Opciones", "Diagramas", "Regresiones", "Intervalos Confianza", "Importar", "Exportar" , "Salir"]
 
-       primerAjuste = CTkOptionMenu(Frame, values=valores, corner_radius=0, command=lambda selection: self.opcionesMenu(selection))
+       primerAjuste = CTkOptionMenu(Frame, values=valores, 
+                                    text_color = self.colorFondo,
+                                    button_color = self.amarillo,
+                                    button_hover_color = self.amarilloOscuro,
+                                    fg_color= self.amarillo,
+                                    corner_radius=0, 
+                                    command=lambda selection: self.opcionesMenu(selection))
        primerAjuste.grid(row = 0, column = 0, sticky = "e")
 
        Usuario = CTkLabel(Frame, text="Usuario   ", anchor="e")
        Usuario.grid(row=0, column=1, sticky = "ew")
 
-       loggin = CTkButton(Frame, text="Loggin", corner_radius=0, command = lambda : self.loggin(self.app))
+       loggin = CTkButton(Frame,
+                          fg_color = self.amarillo,
+                          text_color = self.colorFondo,
+                          text ="Loggin", 
+                          corner_radius=0, 
+                          command = lambda : self.loggin(self.app))
        loggin.grid(row=0, column=2, sticky = "e")
 
     def listasDatos(self, Frame):
@@ -200,7 +213,6 @@ class Ventana():
                                          compound = "left",
                                         )
         
-
         Texto.grid(row = 0, column = 0,  sticky="new") 
 
     def graficoPredeterminado(self, Frame):
