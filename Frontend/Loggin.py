@@ -1,5 +1,5 @@
 from customtkinter import *
-from PIL import Image, ImageTk
+from PIL import Image
 
 class Loggin():
 
@@ -8,6 +8,8 @@ class Loggin():
         self.amarillo = "#ffd422"
         self.azul = "#27438d"
         self.colorFondo = '#19191a'
+
+        self.password = []
         
         self.logginAncho = self.obtenerAncho(Ventana, 50)
         self.logginLargo = self.obtenerLargo(Ventana, 50)
@@ -179,7 +181,7 @@ class Loggin():
                                     width =  contendorAncho,
                                     height =  contenedorLargo)
         
-        self.boton(tercerContenedor, contendorAncho, contenedorLargo)
+        self.boton(tercerContenedor, contendorAncho, contenedorLargo, primerContenedor)
         
         tercerContenedor.grid(row = 2, column = 0, sticky = "nsew")  
 
@@ -238,10 +240,29 @@ class Loggin():
                           width = self.obtenerAncho(Frame, Ancho, 70),
                           height = self.obtenerLargo(Frame, Largo, 30),
                           )
+        
+        clave.bind("<Key>", lambda event : self.detectarTecla(clave, event, self.password))
 
         clave.grid(row = 1, column = 0)
 
-    def boton(self, Frame, Ancho, Largo):
+    def detectarTecla(self, contenedor, event, contenido):
+
+        if (event.keysym == "BackSpace"):
+
+            if(len(contenedor.get()) > 0):    
+
+                del contenido[-1]
+
+        else:
+                
+            teclaPresionada = event.char
+            contenido.append(teclaPresionada)
+
+        contenidoOculto = "*" * len(contenido) 
+        contenedor.delete(0, "end")
+        contenedor.insert(0, contenidoOculto)
+
+    def boton(self, Frame, Ancho, Largo, primerEntry):
 
         Frame.rowconfigure(0, weight = 1)
         Frame.columnconfigure(0, weight = 1)
@@ -251,7 +272,20 @@ class Loggin():
                           font = ("Helvetica", 16),
                           text_color = self.colorFondo,
                           fg_color = self.amarillo,
+                          command = lambda : self.mandarInformacion(primerEntry),
                           width = self.obtenerAncho(Frame, 60, Ancho),
                           height = self.obtenerLargo(Frame, 60, Largo))
         
         boton.grid(row = 0, column = 0)
+
+    def mandarInformacion(self, frameUsuario):
+        
+        Entradas = frameUsuario.winfo_children()[1]
+
+        usuario = Entradas.get()
+        password = "".join(self.password)
+
+        print(usuario)
+        print(password)
+
+        #Implementacion para validar si el loggin es valido.
