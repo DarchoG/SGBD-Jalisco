@@ -7,13 +7,51 @@ def connect():
             host='localhost',
             user='postgres',
             port='5432', 
-            password='',  #Coloca tu contraseña
+            password='garzia619',  #Coloca tu contraseña
             database='crecimientojalisco' #cambia el nombre si lo tienes con otro
         )
         return connection
     except psycopg2.Error as ex:
         print("Error al conectar a la base de datos:", ex)
         return None
+
+def tablas():
+    try:
+        connection = connect()
+        cursor = connection.cursor()
+
+        # Query para seleccionar todas las tablas en la base de datos
+        cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
+        print("Tablas en la base de datos:")
+        for row in cursor.fetchall():
+            print(row[0])
+        
+        # Cerrar la conexión
+        cursor.close()
+        connection.close()
+        return tablas
+    
+    except Exception as e:
+        print(f"Error al conectar o consultar la base de datos: {e}")
+        return None
+
+def mostrar_tabla(nombre_tabla):
+    try: 
+        connection = connect()
+        cursor = connection.cursor()
+
+        consulta = f"SELECT * FROM {nombre_tabla}"
+        cursor.execute(consulta)
+
+        print("Registros de la tabla:", nombre_tabla)
+        for fila in cursor.fetchall():
+            print(fila)
+        
+        cursor.close()
+        connection.close()
+
+    except Exception as ex:
+        print(f"Error al conectar o consultar la base de datos: {ex}")
 
 def add_sectores(nombre_sectores):
     try:
@@ -673,6 +711,10 @@ def update_fecha(id, nuevo_periodo): # valores de la tabla fecha
 
 # Llamada a las funciones
 connect()
+print("")
+tablas()
+print("")
+mostrar_tabla("actividades_economicas")
 #update_sector(12, "Cultural")
 #add_sectores("Turistico")
 #delete_actividad()
