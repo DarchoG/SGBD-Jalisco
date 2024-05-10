@@ -1,7 +1,7 @@
 from customtkinter import *
-from PIL import Image, ImageTk
-import sys  
-
+from PIL import Image
+import sys
+ 
 import Loggin
 
 class Ventana():
@@ -43,10 +43,9 @@ class Ventana():
         self.tercerFrameAncho = None
         self.tercerFrameLargo = None
 
-        self.establecerFrames(self.app)
-
+        self.pantallaCarga(self.app)
         self.app.mainloop()
-
+    
     def obtenerAncho(self, Ventana, Porcentaje, Ancho = None):
 
         if(Ancho == None):
@@ -82,8 +81,64 @@ class Ventana():
             return (Largo * Porcentaje) // 100
         
         return (Largo * Porcentaje) // 100
+    
+    def pantallaCarga(self, Frame):
 
+        Frame.rowconfigure(0, weight = 1)
+        Frame.rowconfigure(1, weight = 1)
+        Frame.columnconfigure(0, weight = 1)
+
+        anchoImagenFrame = self.obtenerAncho(Frame, 100)
+        largoImagenFrame = self.obtenerLargo(Frame, 80)
+
+        Imagen = CTkImage(light_image = Image.open("Imagenes/pantallaCarga.png"), 
+                          dark_image = Image.open("Imagenes/pantallaCarga.png"),
+                          size=(self.obtenerAnchoWidget(Frame, 40, anchoImagenFrame),
+                                 self.obtenerLargoWidget(Frame, 30, largoImagenFrame)))
+        
+        contenedor = CTkLabel(master = Frame,
+                              text = "",
+                              image = Imagen)
+        
+        contenedor.grid(row = 0, column = 0)
+        
+        anchoCargarFrame = self.obtenerAncho(Frame, 100)
+        largoCargaFrame = self.obtenerLargo(Frame, 20)
+
+        barraCarga = CTkProgressBar(master = Frame,
+                                    width = self.obtenerAnchoWidget(Frame, 20, anchoCargarFrame),
+                                    height = self.obtenerLargoWidget(Frame, 3, largoCargaFrame),
+                                    progress_color = "#ffd422",
+                                    orientation = "horizontal",
+                                    )
+        
+        barraCarga.grid(row = 1, column = 0)
+
+        barraCarga.set(0)
+
+        def barraProgreso():
+
+            valor = barraCarga.get()
+
+            if(valor < 1):
+
+                 valor += 0.004
+                 barraCarga.set(valor)
+                 Frame.after(10, barraProgreso)
+            
+            else:
+
+                self.establecerFrames(self.app)
+
+        barraCarga.start()
+        barraProgreso()        
+        barraCarga.stop()
+        
     def establecerFrames(self, Ventana):
+
+        for widget in self.app.winfo_children():
+
+            widget.destroy() 
 
         Ventana.columnconfigure(0, weight = 1)
         Ventana.rowconfigure(0, weight = 0)
@@ -313,6 +368,8 @@ class Ventana():
     def loggin(self, Ventana):
 
         Loggin.Loggin(Ventana)
+
+        #del Loggin  
 
     def opcionesMenu(self, opcion):
         
