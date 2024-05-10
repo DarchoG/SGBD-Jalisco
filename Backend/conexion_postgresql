@@ -31,22 +31,27 @@ def tablas():
         connection.close()
         return tablas
     
-    except Exception as e:
-        print(f"Error al conectar o consultar la base de datos: {e}")
+    except Exception as ex:
+        print(f"Error al conectar o consultar la base de datos: {ex}")
         return None
 
-def mostrar_tabla(nombre_tabla):
+def mostrar_registros(nombre_tabla):
     try: 
         connection = connect()
         cursor = connection.cursor()
 
+        cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{nombre_tabla}' AND table_schema = 'public'")
+        columnas = [desc[0] for desc in cursor.fetchall()]
+
+        # Consulta para seleccionar todos los registros de la tabla
         consulta = f"SELECT * FROM {nombre_tabla}"
         cursor.execute(consulta)
 
-        print("Registros de la tabla:", nombre_tabla)
-        for fila in cursor.fetchall():
-            print(fila)
-        
+        print("\nRegistros de la tabla:", nombre_tabla)
+        print(columnas) # Imprime los nombres de las columnas
+        for fila in cursor.fetchall():  
+            print(fila)  # Imprime los valores de cada registro
+
         cursor.close()
         connection.close()
 
@@ -714,7 +719,7 @@ connect()
 print("")
 tablas()
 print("")
-mostrar_tabla("actividades_economicas")
+mostrar_registros("actividades_economicas")
 #update_sector(12, "Cultural")
 #add_sectores("Turistico")
 #delete_actividad()
