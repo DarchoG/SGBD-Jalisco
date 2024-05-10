@@ -22,10 +22,13 @@ class Loggin():
 
         for widget in Ventana.winfo_children():
 
-            if isinstance(widget, CTkFrame):
-                widget.destroy() 
+            widget.destroy() 
 
         self.establecerFrames(Ventana)
+
+    def __del__(self):
+      
+      print ("Object gets destroyed");
 
     def obtenerAncho(self, Ventana, Proporcion, Ancho = None):
 
@@ -181,7 +184,7 @@ class Loggin():
                                     width =  contendorAncho,
                                     height =  contenedorLargo)
         
-        self.boton(tercerContenedor, contendorAncho, contenedorLargo, primerContenedor)
+        self.boton(tercerContenedor, contendorAncho, contenedorLargo, primerContenedor, segundoContenedor)
         
         tercerContenedor.grid(row = 2, column = 0, sticky = "nsew")  
 
@@ -262,7 +265,7 @@ class Loggin():
         contenedor.delete(0, "end")
         contenedor.insert(0, contenidoOculto)
 
-    def boton(self, Frame, Ancho, Largo, primerEntry):
+    def boton(self, Frame, Ancho, Largo, primerEntry, segundoEntry):
 
         Frame.rowconfigure(0, weight = 1)
         Frame.columnconfigure(0, weight = 1)
@@ -272,15 +275,16 @@ class Loggin():
                           font = ("Helvetica", 16),
                           text_color = self.colorFondo,
                           fg_color = self.amarillo,
-                          command = lambda : self.mandarInformacion(primerEntry),
+                          command = lambda : self.mandarInformacion(primerEntry, segundoEntry),
                           width = self.obtenerAncho(Frame, 60, Ancho),
                           height = self.obtenerLargo(Frame, 60, Largo))
         
         boton.grid(row = 0, column = 0)
 
-    def mandarInformacion(self, frameUsuario):
+    def mandarInformacion(self, frameUsuario, frameClave):
         
         Entradas = frameUsuario.winfo_children()[1]
+        Clave = frameClave.winfo_children()[1]
 
         usuario = Entradas.get()
         password = "".join(self.password)
@@ -288,4 +292,32 @@ class Loggin():
         print(usuario)
         print(password)
 
-        #Implementacion para validar si el loggin es valido.
+        if(usuario != "user" and password != "admin"):
+
+            self.error(Entradas, Clave)
+
+        else:
+            
+            self.__del__()
+                
+    def error(self, Usuario, Clave):
+
+        Usuario.configure(placeholder_text = "Usuario o Clave Incorrecta", 
+                          placeholder_text_color = "Red",
+                          )
+        
+        Usuario.bind("<FocusIn>", lambda event: self.restablecerContenedor(Usuario, "Usuario"))
+
+        Clave.configure(placeholder_text = "Usuario o Clave Incorrecta", 
+                        placeholder_text_color = "Red",
+                        )
+        
+        Clave.bind("<FocusIn>", lambda event: self.restablecerContenedor(Clave, "Clave"))
+        self.password.clear()
+
+    def restablecerContenedor(self, Entry, String):
+
+        Entry.configure(placeholder_text = String, 
+                          placeholder_text_color = 'transparent',
+                          )
+        Entry.unbind("<FocusIn>")        
