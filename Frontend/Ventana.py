@@ -6,13 +6,12 @@ import Loggin
 
 class Ventana():
 
-    def __init__(self):
+    def __init__(self, status = None):
 
-        self.app = CTk()
+        self.app = CTk()    
         self.Ancho = self.obtenerAncho(self.app, 60)
         self.Largo = self.obtenerLargo(self.app, 60)
-        self.Loggin = False
-
+    
         self.app.geometry(f"{self.Ancho}x{self.Largo}")
         self.app.title("SGBD Jalisco")
 
@@ -43,7 +42,8 @@ class Ventana():
         self.tercerFrameAncho = None
         self.tercerFrameLargo = None
 
-        self.pantallaCarga(self.app)
+        #self.pantallaCarga(self.app)
+        self.establecerFrames(self.app)
         self.app.mainloop()
     
     def obtenerAncho(self, Ventana, Porcentaje, Ancho = None):
@@ -367,9 +367,12 @@ class Ventana():
 
     def loggin(self, Ventana):
 
-        Loggin.Loggin(Ventana)
+        Status = False
+        print(Status)
 
-        #del Loggin  
+        Loggin.Loggin(Ventana, Status)
+        
+        self.__init__() 
 
     def opcionesMenu(self, opcion):
         
@@ -402,4 +405,4 @@ class Ventana():
             print("Caso no Definido")               
 
 if __name__ == "__main__":
-    ventana_principal = Ventana()            
+    ventana_principal = Ventana() 
