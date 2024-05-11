@@ -3,11 +3,13 @@ from PIL import Image
 
 class Loggin():
 
-    def __init__(self, Ventana):
+    def __init__(self, Ventana, Status):
 
         self.amarillo = "#ffd422"
         self.azul = "#27438d"
         self.colorFondo = '#19191a'
+
+        Status = True
 
         self.password = []
         
@@ -26,9 +28,18 @@ class Loggin():
 
         self.establecerFrames(Ventana)
 
-    def __del__(self):
-      
-      print ("Object gets destroyed");
+        Ventana.mainloop()
+
+    def __del__(self, Frame = None):
+
+        try:
+
+         Ventana = Frame.winfo_toplevel()
+
+        except:
+            pass
+
+        Ventana.destroy()
 
     def obtenerAncho(self, Ventana, Proporcion, Ancho = None):
 
@@ -244,25 +255,25 @@ class Loggin():
                           height = self.obtenerLargo(Frame, Largo, 30),
                           )
         
-        clave.bind("<Key>", lambda event : self.detectarTecla(clave, event, self.password))
+        clave.bind("<KeyRelease>", lambda event : self.detectarTecla(clave, event, self.password))
 
-        clave.grid(row = 1, column = 0)
+        clave.grid(row = 1  , column = 0)
 
     def detectarTecla(self, contenedor, event, contenido):
 
         if (event.keysym == "BackSpace"):
 
-            if(len(contenedor.get()) > 0):    
-
+            try:  
                 del contenido[-1]
-
+            except:
+                pass    
         else:
-                
+
             teclaPresionada = event.char
             contenido.append(teclaPresionada)
 
-        contenidoOculto = "*" * len(contenido) 
-        contenedor.delete(0, "end")
+        contenidoOculto = "*" * len(contenido)
+        contenedor.delete(0, END)
         contenedor.insert(0, contenidoOculto)
 
     def boton(self, Frame, Ancho, Largo, primerEntry, segundoEntry):
@@ -292,13 +303,13 @@ class Loggin():
         print(usuario)
         print(password)
 
-        if(usuario != "user" and password != "admin"):
+        if(usuario == "user" and password == "admin"):
 
-            self.error(Entradas, Clave)
+            self.__del__(frameUsuario)
 
         else:
             
-            self.__del__()
+            self.error(Entradas, Clave)
                 
     def error(self, Usuario, Clave):
 
