@@ -15,7 +15,7 @@ def connect():
     except psycopg2.Error as ex:
         print("Error al conectar a la base de datos:", ex)
         return None
-
+# Esta funcion da el nombre las tablas
 def tablas():
     try:
         connection = connect()
@@ -35,7 +35,7 @@ def tablas():
     except Exception as ex:
         print(f"Error al conectar o consultar la base de datos: {ex}")
         return None
-
+# Esta funcion muestra los registros de la tabla, solo ingresa el nombre de la tabla correctamente
 def mostrar_registros(nombre_tabla):
     try: 
         connection = connect()
@@ -58,7 +58,8 @@ def mostrar_registros(nombre_tabla):
 
     except Exception as ex:
         print(f"Error al conectar o consultar la base de datos: {ex}")
-
+        
+# A partir de aqui son un copy paste en add, para este ingresas el nombre del nuevo sector, el id incrementa automaticamente para no registrar errores
 def add_sectores(nombre_sectores):
     try:
         connection = connect()  # Conexion a la BD valida
@@ -92,6 +93,7 @@ def add_sectores(nombre_sectores):
             cursor.close()
             connection.close()
 
+# aqui si ocupas darle el id del sector junto con el nombre para modificar
 def update_sector(id_sector, nombre_sector): # valores de la tabla
     try:
         connection = connect()  # conexión a la base de datos
@@ -129,6 +131,7 @@ def update_sector(id_sector, nombre_sector): # valores de la tabla
             cursor.close()
             connection.close()
 
+# aqui ingresas el id para borrar
 def delete_sectores(id):
     try:
         connection = connect()
@@ -166,6 +169,7 @@ def delete_sectores(id):
             cursor.close()
             connection.close()
 
+# aqui ingresas el nombre de la carrera, igualmente incrementa
 def add_carreras(nombre_carrera):
     try:
         connection = connect() 
@@ -195,7 +199,8 @@ def add_carreras(nombre_carrera):
         if connection:
             cursor.close()
             connection.close()
-
+            
+# añáde el id, y nombre de la carrera a actualizar
 def update_carreras(id_carrera, nombre_carrera): # valores de la tabla
     try:
         connection = connect()  
@@ -229,7 +234,8 @@ def update_carreras(id_carrera, nombre_carrera): # valores de la tabla
         if connection:
             cursor.close()
             connection.close()
-
+            
+# se borra por id
 def delete_carreras(id):
     try:
         connection = connect()
@@ -264,7 +270,8 @@ def delete_carreras(id):
         if connection:
             cursor.close()
             connection.close()
-
+            
+# añade el id del periodo y la cantidad de población
 def add_poblacion(periodo, cantidad_poblacion):
     try:
         connection = connect()  
@@ -294,7 +301,8 @@ def add_poblacion(periodo, cantidad_poblacion):
         if connection:
             cursor.close()
             connection.close()
-
+            
+# ingresa el id, numero de periodo que pertenece y la cantidad a corregir
 def update_poblacion(id_poblacion, periodo, cantidad_poblacion): # valores de la tabla
     try:
         connection = connect() 
@@ -328,16 +336,17 @@ def update_poblacion(id_poblacion, periodo, cantidad_poblacion): # valores de la
         if connection:
             cursor.close()
             connection.close()
-
-def delete_poblacion(periodo):
+            
+#ingresa el id
+def delete_poblacion(id):
     try:
         connection = connect()
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM poblacion")
 
         cursor.execute(
-            "DELETE FROM poblacion WHERE periodo = %s",
-            (periodo,)
+            "DELETE FROM poblacion WHERE id = %s",
+            (id,)
         )
 
         connection.commit()
@@ -357,7 +366,8 @@ def delete_poblacion(periodo):
         if connection:
             cursor.close()
             connection.close()
-
+            
+# añade el nombre de la actividad y el id del sector al que pertenecerá
 def add_actividad(nombre_actividad, id_sector):
     try:
         connection = connect()  
@@ -388,6 +398,7 @@ def add_actividad(nombre_actividad, id_sector):
             cursor.close()
             connection.close()
 
+# ingresa el id, nombre nuevo y sector nuevo (si es necesario)
 def update_actividad(id_actividad, nombre_actividad, id_sector): # valores de la tabla
     try:
         connection = connect() 
@@ -422,7 +433,7 @@ def update_actividad(id_actividad, nombre_actividad, id_sector): # valores de la
             cursor.close()
             connection.close()
 
-
+# solo ingresa id y borras
 def delete_actividad(id_act):
     try:
         connection = connect()
@@ -457,7 +468,8 @@ def delete_actividad(id_act):
         if connection:
             cursor.close()
             connection.close()
-
+            
+# añade el nombre a que periodo peretenece, id de la actividad y el el numero de resultado
 def add_resultados(periodo, id_actividad, resultado):
     try:
         connection = connect()  
@@ -488,6 +500,7 @@ def add_resultados(periodo, id_actividad, resultado):
             cursor.close()
             connection.close()
 
+# id, id del periodo del que pertenece, id de la actividad, y resultado nuevo
 def update_resultados(id_resultado, periodo, id_actividad, resultado): # valores de la tabla
     try:
         connection = connect() 
@@ -522,7 +535,7 @@ def update_resultados(id_resultado, periodo, id_actividad, resultado): # valores
             cursor.close()
             connection.close()
 
-
+#id de resultados
 def delete_resultados(id_resultados):
     try:
         connection = connect()
@@ -552,6 +565,7 @@ def delete_resultados(id_resultados):
             cursor.close()
             connection.close()
 
+# periodo al que pertenece, nombre de la nueva carrera, y graduados
 def add_titulados(periodo, carrera, graduados):
     try:
         connection = connect()  
@@ -582,6 +596,7 @@ def add_titulados(periodo, carrera, graduados):
             cursor.close()
             connection.close()
 
+# id_titulado, periodo cambiable, id_carrera, y nuevo valor a graduados
 def update_titulados(id_titulado, periodo, id_carrera, graduados): # valores de la tabla titulados
     try:
         connection = connect() 
@@ -650,7 +665,8 @@ def delete_titulados(id_titulados): #id_titulados
         if connection:
             cursor.close()
             connection.close()
-
+            
+# añade el nuevo año
 def add_fechas(periodo): # periodo
     try:
         connection = connect()  
@@ -680,7 +696,8 @@ def add_fechas(periodo): # periodo
         if connection:
             cursor.close()
             connection.close()
-
+            
+# id, nuevo periodo
 def update_fecha(id, nuevo_periodo): # valores de la tabla fecha
     try:
         connection = connect()  
