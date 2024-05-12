@@ -9,7 +9,7 @@ class Loggin():
         self.azul = "#27438d"
         self.colorFondo = '#19191a'
 
-        Status = True
+        self.Status = Status
 
         self.password = []
         
@@ -30,15 +30,10 @@ class Loggin():
 
         Ventana.mainloop()
 
-    def __del__(self, Frame = None):
+    def borrar(self, Frame = None):
 
-        try:
-
-         Ventana = Frame.winfo_toplevel()
-
-        except:
-            pass
-
+        Ventana = Frame.winfo_toplevel()
+        self.Status[0] = True
         Ventana.destroy()
 
     def obtenerAncho(self, Ventana, Proporcion, Ancho = None):
@@ -305,7 +300,7 @@ class Loggin():
 
         if(usuario == "user" and password == "admin"):
 
-            self.__del__(frameUsuario)
+            self.borrar(frameUsuario)
 
         else:
             
