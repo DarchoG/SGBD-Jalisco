@@ -2,11 +2,15 @@ from customtkinter import *
 from PIL import Image
 import sys
  
-import Loggin
+from Loggin import Loggin
 
 class Ventana():
 
-    def __init__(self, status = None):
+    def __init__(self):
+
+            self.iniciar()
+
+    def iniciar(self, status = None):
 
         self.app = CTk()    
         self.Ancho = self.obtenerAncho(self.app, 60)
@@ -14,6 +18,12 @@ class Ventana():
     
         self.app.geometry(f"{self.Ancho}x{self.Largo}")
         self.app.title("SGBD Jalisco")
+        
+        self.Loggin = False
+
+        if(status == True):
+
+            self.Loggin = True
 
         #Paleta de Colores
 
@@ -42,10 +52,22 @@ class Ventana():
         self.tercerFrameAncho = None
         self.tercerFrameLargo = None
 
-        #self.pantallaCarga(self.app)
+        '''
+
+        if(self.Loggin == False):
+
+            self.pantallaCarga(self.app)
+
+        else:
+
+            self.establecerFrames(self.app)
+
+        '''
+
         self.establecerFrames(self.app)
+
         self.app.mainloop()
-    
+
     def obtenerAncho(self, Ventana, Porcentaje, Ancho = None):
 
         if(Ancho == None):
@@ -224,7 +246,6 @@ class Ventana():
        Frame.rowconfigure(0, weight=0)
        Frame.columnconfigure(0, weight=0)
        Frame.columnconfigure(1, weight=1)
-       Frame.columnconfigure(2, weight=1)
 
        valores = ["Opciones", "Diagramas", "Regresiones", "Intervalos Confianza", "Importar", "Exportar" , "Salir"]
 
@@ -240,13 +261,33 @@ class Ventana():
        Usuario = CTkLabel(Frame, text="Usuario   ", anchor="e")
        Usuario.grid(row=0, column=1, sticky = "ew")
 
-       loggin = CTkButton(Frame,
-                          fg_color = self.amarillo,
-                          text_color = self.colorFondo,
-                          text ="Loggin", 
-                          corner_radius=0, 
-                          command = lambda : self.loggin(self.app))
-       loggin.grid(row=0, column=2, sticky = "e")
+       self.logginActivo(Frame, Usuario)
+
+    def logginActivo(self, Frame, Widget):
+       
+       if(self.Loggin == False):
+        
+            Frame.columnconfigure(2, weight=1)    
+
+            loggin = CTkButton(Frame,
+                                fg_color = self.amarillo,
+                                text_color = self.colorFondo,
+                                text ="Loggin", 
+                                corner_radius=0, 
+                                command = lambda : self.loggin(self.app))
+            loggin.grid(row=0, column=2, sticky = "e")  
+
+       else:
+           
+           Imagen = CTkImage(light_image = Image.open("Imagenes/Usuario.png"), 
+                          dark_image = Image.open("Imagenes/Usuario.png"),
+                          size=(20, 20))           
+
+           Widget.configure(text = " Administrador",
+                            #text_color = self.amarillo,
+                            image = Imagen,
+                            compound = "left")
+           Widget.grid(sticky = "")
 
     def listasDatos(self, Frame):
 
@@ -268,11 +309,9 @@ class Ventana():
                                          compound = "left",
                                         )
         
-        Texto.grid(row = 0, column = 0,  sticky="new") 
-
+        Texto.grid(row = 0, column = 0,  sticky="new")
+ 
     def graficoPredeterminado(self, Frame):
-
-        print(Frame)
 
         Frame.rowconfigure(0, weight = 1)
         Frame.columnconfigure(0, weight = 1)
@@ -314,7 +353,6 @@ class Ventana():
 
     def Enter(self, event, cajaComandos):
 
-        print(self.posicionComandos)
         comando = cajaComandos.get(f"{self.posicionComandos}.0", "end-1c")
         self.ejecutarComando(cajaComandos, comando)
 
@@ -325,8 +363,6 @@ class Ventana():
         #cajaComandos.mark_set("insert", f"{self.posicionComandos}.9")
 
     def ejecutarComando(self, cajaComandos, comando):
-
-        print(comando)
 
         comandosDisponibles = { "cls" : "Borra toda la terminal",
                                "exit" : "Salir",
@@ -356,8 +392,10 @@ class Ventana():
             sys.exit()
 
         elif(comando == "restart"):
+
+           self.app.destroy()
             
-            pass
+           self.iniciar(False)
 
         else:
             
@@ -367,12 +405,13 @@ class Ventana():
 
     def loggin(self, Ventana):
 
-        Status = False
-        print(Status)
+        Status = [False]
 
-        Loggin.Loggin(Ventana, Status)
-        
-        self.__init__() 
+        Loggin(self.app, Status)
+
+        if(Status[0] == True):
+            
+            self.iniciar(True)
 
     def opcionesMenu(self, opcion):
         
