@@ -2,7 +2,8 @@ from customtkinter import *
 from PIL import Image
 import sys
  
-from Loggin import Loggin
+from Frontend import Loggin
+from Backend import Conexion
 
 class Ventana():
 
@@ -113,8 +114,8 @@ class Ventana():
         anchoImagenFrame = self.obtenerAncho(Frame, 100)
         largoImagenFrame = self.obtenerLargo(Frame, 80)
 
-        Imagen = CTkImage(light_image = Image.open("Imagenes/pantallaCarga.png"), 
-                          dark_image = Image.open("Imagenes/pantallaCarga.png"),
+        Imagen = CTkImage(light_image = Image.open("Frontend/Imagenes/pantallaCarga.png"), 
+                          dark_image = Image.open("Frontend/Imagenes/pantallaCarga.png"),
                           size=(self.obtenerAnchoWidget(Frame, 40, anchoImagenFrame),
                                  self.obtenerLargoWidget(Frame, 30, largoImagenFrame)))
         
@@ -292,11 +293,11 @@ class Ventana():
     def listasDatos(self, Frame):
 
         Frame.rowconfigure(0, weight = 1)
-        Frame.rowconfigure(1, weight = 1)
+        Frame.rowconfigure(1, weight = 0)
         Frame.columnconfigure(0, weight = 1) 
 
-        Imagen = CTkImage(light_image=Image.open("Imagenes/basesDatos.png"),
-                          dark_image=Image.open("Imagenes/basesDatos.png"),
+        Imagen = CTkImage(light_image=Image.open("Frontend/Imagenes/basesDatos.png"),
+                          dark_image=Image.open("Frontend/Imagenes/basesDatos.png"),
                           size = (16, 16))
         
         Texto = CTkLabel(master = Frame,
@@ -304,20 +305,52 @@ class Ventana():
                                          text_color = self.textoGris,   
                                          corner_radius = 0, 
                                          width = self.obtenerAnchoWidget(Frame, 100, self.segundoPrimerFrameAncho),
-                                         height = self.obtenerLargoWidget(Frame, 10, self.segundoPrimerFrameLargo),
+                                         height = self.obtenerLargoWidget(Frame, 15, self.segundoPrimerFrameLargo),
                                          image=Imagen,
                                          compound = "left",
                                         )
         
         Texto.grid(row = 0, column = 0,  sticky="new")
+
+        basesDatosAncho = self.obtenerAnchoWidget(Frame, 100, self.segundoPrimerFrameAncho)
+        basesDatosLargo = self.obtenerLargoWidget(Frame, 85, self.segundoPrimerFrameLargo)
+
+        basesDatos = CTkScrollableFrame(master = Frame,
+                              width = basesDatosAncho,
+                              height = basesDatosLargo,
+                              )
+
+        #basesDatos.grid(row = 1, column = 0, sticky = "nsew")
+
+        basesDatos.columnconfigure(0, weight = 1)
+
+        Tablas = Conexion.tablas()
+        
+        '''
+
+        for i in range(len(Tablas)):
+         
+            basesDatos.rowconfigure(i, weight = 1)
+            
+            Elemento = CTkButton(master = basesDatos,
+                                            text =  Tablas[i],
+                                            text_color = self.textoGris,   
+                                            corner_radius = 0, 
+                                            width = self.obtenerAnchoWidget(Frame, 100, basesDatosAncho),
+                                            height = self.obtenerLargoWidget(Frame, 5, basesDatosLargo),
+                                            compound = "left",
+                                            )
+
+            Elemento.grid(row = i, column = 0)  
+              '''       
  
     def graficoPredeterminado(self, Frame):
 
         Frame.rowconfigure(0, weight = 1)
         Frame.columnconfigure(0, weight = 1)
 
-        Imagen = CTkImage(light_image = Image.open("Imagenes/Stock.png"), 
-                          dark_image = Image.open("Imagenes/Stock.png"),
+        Imagen = CTkImage(light_image = Image.open("Frontend/Imagenes/Stock.png"), 
+                          dark_image = Image.open("Frontend/Imagenes/Stock.png"),
                           size=(self.obtenerLargoWidget(Frame, 50), self.obtenerLargoWidget(Frame, 50)))
         
         Texto = CTkLabel(master = Frame,
@@ -442,6 +475,3 @@ class Ventana():
         else:
 
             print("Caso no Definido")               
-
-if __name__ == "__main__":
-    ventana_principal = Ventana() 
