@@ -8,8 +8,8 @@ def connect():
             host='localhost',
             user='postgres',
             port='5432', 
-            password='',  #Coloca tu contraseña
-            database='crecimientojalisco' #cambia el nombre si lo tienes con otro
+            password='123',  #Coloca tu contraseña
+            database='Jalisco' #cambia el nombre si lo tienes con otro
         )
         return connection
     except psycopg2.Error as ex:
@@ -18,19 +18,20 @@ def connect():
 # Esta funcion da el nombre las tablas
 def tablas():
     try:
+        Informacion = []
         connection = connect()
         cursor = connection.cursor()
 
         # Query para seleccionar todas las tablas en la base de datos
         cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
-        print("Tablas en la base de datos:")
+        #print("Tablas en la base de datos:")
         for row in cursor.fetchall():
-            print(row[0])
-        
+            Informacion.append(row[0])
+    
         # Cerrar la conexión
         cursor.close()
         connection.close()
-        return tablas
+        return Informacion
     
     except Exception as ex:
         print(f"Error al conectar o consultar la base de datos: {ex}")
@@ -38,11 +39,13 @@ def tablas():
 # Esta funcion muestra los registros de la tabla, solo ingresa el nombre de la tabla correctamente
 def mostrar_registros(nombre_tabla):
     try: 
+        Informacion = []
         connection = connect()
         cursor = connection.cursor()
 
         cursor.execute(f"SELECT column_name FROM information_schema.columns WHERE table_name = '{nombre_tabla}' AND table_schema = 'public'")
         columnas = [desc[0] for desc in cursor.fetchall()]
+        Informacion.append(columnas)
 
         # Consulta para seleccionar todos los registros de la tabla
         consulta = f"SELECT * FROM {nombre_tabla}"
@@ -50,12 +53,14 @@ def mostrar_registros(nombre_tabla):
 
         print("\nRegistros de la tabla:", nombre_tabla)
         print(columnas) # Imprime los nombres de las columnas
-        for fila in cursor.fetchall():  
+        for fila in cursor.fetchall():
+            Informacion.append(fila)  
             print(fila)  # Imprime los valores de cada registro
 
         cursor.close()
         connection.close()
-
+        return Informacion
+    
     except Exception as ex:
         print(f"Error al conectar o consultar la base de datos: {ex}")
         
@@ -303,7 +308,10 @@ def add_poblacion(periodo, cantidad_poblacion):
             connection.close()
             
 # ingresa el id, numero de periodo que pertenece y la cantidad a corregir
-def update_poblacion(id_poblacion, periodo, cantidad_poblacion): # valores de la tabla
+def update_poblacion(id_poblacion, cantidad_poblacion): # valores de la tabla
+    
+    periodo = id_poblacion
+
     try:
         connection = connect() 
         cursor = connection.cursor()
