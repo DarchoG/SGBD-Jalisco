@@ -80,15 +80,15 @@ class Loggin():
         Frame.rowconfigure(0, weight = 1)
         Frame.columnconfigure(0, weight = 1)
 
-        Imagen = Image.open("Imagenes/Loggin.png")
+        Imagen = Image.open("Frontend/Imagenes/Loggin.png")
 
         imagenAncho, imagenAlto = Imagen.size
 
         imagenAlto = (imagenAlto * 40) // 100
         imagenAncho = (imagenAncho * 40) // 100
 
-        ImagenFrame = CTkImage(light_image = Image.open("Imagenes/Loggin.png"), 
-                          dark_image = Image.open("Imagenes/Loggin.png"),
+        ImagenFrame = CTkImage(light_image = Image.open("Frontend/Imagenes/Loggin.png"), 
+                          dark_image = Image.open("Frontend/Imagenes/Loggin.png"),
                           size=(imagenAncho, imagenAlto)
                           )
         
@@ -200,8 +200,8 @@ class Loggin():
         Frame.rowconfigure(1, weight = 1)
         Frame.columnconfigure(0, weight = 1)
         
-        Imagen = CTkImage(light_image = Image.open("Imagenes/Usuario.png"), 
-                          dark_image = Image.open("Imagenes/Usuario.png"),
+        Imagen = CTkImage(light_image = Image.open("Frontend/Imagenes/Usuario.png"), 
+                          dark_image = Image.open("Frontend/Imagenes/Usuario.png"),
                           size=(20, 20))
 
         texto = CTkLabel(master = Frame,
@@ -229,8 +229,8 @@ class Loggin():
         Frame.rowconfigure(1, weight = 1)
         Frame.columnconfigure(0, weight = 1)
         
-        Imagen = CTkImage(light_image = Image.open("Imagenes/Clave.png"), 
-                          dark_image = Image.open("Imagenes/Clave.png"),
+        Imagen = CTkImage(light_image = Image.open("Frontend/Imagenes/Clave.png"), 
+                          dark_image = Image.open("Frontend/Imagenes/Clave.png"),
                           size=(16, 20))
 
         texto = CTkLabel(master = Frame,
