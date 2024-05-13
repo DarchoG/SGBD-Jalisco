@@ -1,4 +1,5 @@
 from customtkinter import *
+from CTkTable import *
 from PIL import Image
 import sys
  
@@ -53,8 +54,6 @@ class Ventana():
         self.tercerFrameAncho = None
         self.tercerFrameLargo = None
 
-        '''
-
         if(self.Loggin == False):
 
             self.pantallaCarga(self.app)
@@ -62,10 +61,6 @@ class Ventana():
         else:
 
             self.establecerFrames(self.app)
-
-        '''
-
-        self.establecerFrames(self.app)
 
         self.app.mainloop()
 
@@ -216,14 +211,14 @@ class Ventana():
         self.segundoSegundoFrameAncho = self.obtenerAnchoWidget(segundoFrame, 70)
         self.segundoSegundoFrameLargo = self.obtenerLargoWidget(segundoFrame, 100)
 
-        segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
+        self.segundoSegundoFrame = CTkFrame(master=segundoFrame, fg_color=self.colorFondo, 
                                width = self.segundoSegundoFrameAncho,
                                height = self.segundoSegundoFrameLargo,
                                corner_radius=0)
-        segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
+        self.segundoSegundoFrame.grid(row = 0, column = 1, sticky="nswe")
         #segundoSegundoFrame.grid_propagate(False) 
 
-        self.graficoPredeterminado(segundoSegundoFrame)
+        self.graficoPredeterminado(self.segundoSegundoFrame)
 
         #Tercer widget Principal
 
@@ -280,8 +275,8 @@ class Ventana():
 
        else:
            
-           Imagen = CTkImage(light_image = Image.open("Imagenes/Usuario.png"), 
-                          dark_image = Image.open("Imagenes/Usuario.png"),
+           Imagen = CTkImage(light_image = Image.open("Frontend/Imagenes/Usuario.png"), 
+                          dark_image = Image.open("Frontend/Imagenes/Usuario.png"),
                           size=(20, 20))           
 
            Widget.configure(text = " Administrador",
@@ -293,8 +288,9 @@ class Ventana():
     def listasDatos(self, Frame):
 
         Frame.rowconfigure(0, weight = 1)
-        Frame.rowconfigure(1, weight = 0)
-        Frame.columnconfigure(0, weight = 1) 
+        Frame.rowconfigure(1, weight = 1)
+        Frame.columnconfigure(0, weight = 1)
+        #Frame.grid_propagate(False) 
 
         Imagen = CTkImage(light_image=Image.open("Frontend/Imagenes/basesDatos.png"),
                           dark_image=Image.open("Frontend/Imagenes/basesDatos.png"),
@@ -309,41 +305,55 @@ class Ventana():
                                          image=Imagen,
                                          compound = "left",
                                         )
-        
+
         Texto.grid(row = 0, column = 0,  sticky="new")
 
-        basesDatosAncho = self.obtenerAnchoWidget(Frame, 100, self.segundoPrimerFrameAncho)
+        basesDatosAncho = self.obtenerAnchoWidget(Frame, 95, self.segundoPrimerFrameAncho)
         basesDatosLargo = self.obtenerLargoWidget(Frame, 85, self.segundoPrimerFrameLargo)
 
+        basesDatos = CTkFrame(master = Frame,
+                              width = basesDatosAncho,
+                              height = basesDatosLargo,
+                              fg_color= self.primerGris,
+                              )
+        
+        basesDatos.configure(width=200)
+        
+        basesDatos.grid(row = 1, column = 0, sticky = "nsew", pady = 10)
+
+        '''
         basesDatos = CTkScrollableFrame(master = Frame,
                               width = basesDatosAncho,
                               height = basesDatosLargo,
+                              fg_color= self.primerGris,
                               )
+        
+        basesDatos.configure(width=200)
+        
+        basesDatos.grid(row = 1, column = 0, sticky = "nsew", padx = 0)
 
-        #basesDatos.grid(row = 1, column = 0, sticky = "nsew")
-
+        '''
         basesDatos.columnconfigure(0, weight = 1)
 
         Tablas = Conexion.tablas()
-        
-        '''
 
-        for i in range(len(Tablas)):
+        for i in range(7): # Tengo más elementos en al consulta SQL
          
             basesDatos.rowconfigure(i, weight = 1)
             
             Elemento = CTkButton(master = basesDatos,
-                                            text =  Tablas[i],
-                                            text_color = self.textoGris,   
-                                            corner_radius = 0, 
-                                            width = self.obtenerAnchoWidget(Frame, 100, basesDatosAncho),
-                                            height = self.obtenerLargoWidget(Frame, 5, basesDatosLargo),
-                                            compound = "left",
-                                            )
+                                                text =  Tablas[i],
+                                                text_color = "white",   
+                                                corner_radius = 0, 
+                                                width = self.obtenerAnchoWidget(Frame, 60, basesDatosAncho),
+                                                height = self.obtenerLargoWidget(Frame, 10, basesDatosLargo),
+                                                compound = "left",
+                                                fg_color = self.colorFondo,
+                                                command=lambda nombre = Tablas[i]: self.consultar(nombre)
+                                                )
 
-            Elemento.grid(row = i, column = 0)  
-              '''       
- 
+            Elemento.grid(row = i, column = 0, pady = 5)  
+  
     def graficoPredeterminado(self, Frame):
 
         Frame.rowconfigure(0, weight = 1)
@@ -365,7 +375,40 @@ class Ventana():
                                         )
 
         Texto.grid(row = 0, column = 0,  sticky="nswe")
-   
+
+    def consultar(self, nombreTabla):
+
+        Tablas = Conexion.mostrar_registros(nombreTabla)
+        Contenido = self.segundoSegundoFrame.winfo_children()
+    
+        for widget in Contenido:
+
+            widget.destroy()
+
+        for i in Tablas:
+
+            print(i)
+
+        Ancho = self.segundoSegundoFrameAncho
+        Largo = self.segundoSegundoFrameLargo
+
+        scroll = CTkScrollableFrame(master = self.segundoSegundoFrame,
+                                    fg_color= self.colorFondo,
+                                    width = Ancho,
+                                    height = Largo)
+
+        scroll.grid(row = 0, column = 0)
+
+        scroll.rowconfigure(0, weight = 1)
+        scroll.columnconfigure(0, weight = 1)
+
+        resultados = CTkTable(master = scroll, 
+                              row = len(Tablas),
+                              column = len(Tablas[0]),
+                              values = Tablas)
+
+        resultados.grid(row = 0, column = 0)
+
     def terminal(self, Frame):
                  
         cajaComandos = CTkTextbox(master=Frame,
@@ -397,9 +440,16 @@ class Ventana():
 
     def ejecutarComando(self, cajaComandos, comando):
 
+        Bandera = [True]
+
         comandosDisponibles = { "cls" : "Borra toda la terminal",
                                "exit" : "Salir",
                                "restart" : "Reiniciar",}
+        
+        comandosLoggin = { "----------- " : "-----------",
+                           "add -nombreTabla " : "Agrega un registro a una tabla",
+                           "edit -nombreTabla -id -valor" : "Edita un registro de la tabla",
+                           "remove -nombreTabla -id" : "Remueve un registro de la tabla"}
 
         if(comando == "help"):
 
@@ -410,6 +460,14 @@ class Ventana():
                 self.posicionComandos += 1
 
                 cajaComandos.insert(f"{self.posicionComandos}.0", "\n{} : {}".format(comando, significado))
+
+            if(self.Loggin == True):
+
+                 for comando, significado in comandosLoggin.items():
+
+                    self.posicionComandos += 1
+
+                    cajaComandos.insert(f"{self.posicionComandos}.0", "\n{} : {}".format(comando, significado))
 
             self.posicionComandos += 1  
             cajaComandos.insert(f"{self.posicionComandos}.0", "\n\n")  
@@ -431,16 +489,93 @@ class Ventana():
            self.iniciar(False)
 
         else:
-            
-            self.posicionComandos += 3
-            cajaComandos.insert(f"{self.posicionComandos}.0", "\nComando '{}' no reconocido.\n\n".format(comando))
-            self.posicionComandos += 1
+
+            if(self.Loggin == True):
+
+                Auxiliar = self.detectarComando(comando)
+                print(Auxiliar)
+
+                if(Auxiliar[0] == "add"):
+
+                    try:
+                        
+                        print(Auxiliar[2])
+                        Conexion.add_carreras(Auxiliar[2])
+
+                    except:
+
+                        self.comandoInvalido(comando, cajaComandos, Bandera)
+
+                elif(Auxiliar[0] == "edit"):
+
+                    try:
+                        
+                        Conexion.update_poblacion(Auxiliar[2], Auxiliar[3])
+
+                    except:
+
+                        self.comandoInvalido(comando, cajaComandos, Bandera)                    
+
+                elif(Auxiliar[0] == "remove"):
+
+                    try:
+                        
+                        Conexion.delete_actividad(Auxiliar[2])
+
+                    except:
+
+                        self.comandoInvalido(comando, cajaComandos, Bandera)
+
+                else:
+                    
+                    self.comandoInvalido(comando, cajaComandos, Bandera)
+
+                if(Bandera[0] == True):
+
+                    self.comandoValido(comando, cajaComandos)
+
+            else:
+
+                self.comandoInvalido(comando, cajaComandos)
+
+    def comandoInvalido(self, comando, cajaComandos, bandera = None):
+
+        self.posicionComandos += 3
+        cajaComandos.insert(f"{self.posicionComandos}.0", "\nComando '{}' no reconocido.\n\n".format(comando))
+        self.posicionComandos += 1
+
+        if(bandera != None):
+
+            bandera[0] == False
+
+    def comandoValido(self, comando, cajaComandos, bandera = None):
+
+        self.posicionComandos += 3
+        cajaComandos.insert(f"{self.posicionComandos}.0", "\nComando '{}' exitoso.\n\n".format(comando))
+        self.posicionComandos += 1
+
+    def detectarComando(self, Comando):
+
+        palabrasDetectadas = []
+        auxiliar = ""
+
+        for i in Comando:
+
+            if(i != " "):
+                auxiliar += i
+            else:
+                palabrasDetectadas.append(auxiliar)
+                auxiliar = ""     
+
+        palabrasDetectadas.append(auxiliar)
+
+        return palabrasDetectadas
 
     def loggin(self, Ventana):
 
         Status = [False]
 
-        Loggin(self.app, Status)
+        Loggin.Loggin(self.app, Status)
 
         if(Status[0] == True):
             
