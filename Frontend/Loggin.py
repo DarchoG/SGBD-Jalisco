@@ -32,8 +32,18 @@ class Loggin():
 
     def borrar(self, Frame = None):
 
+        #Loggin exitoso
+
         Ventana = Frame.winfo_toplevel()
         self.Status[0] = True
+        Ventana.destroy()
+
+    def regresar(self,  Frame, event = None):
+
+        #Loggin fracasado.
+
+        Ventana = Frame.winfo_toplevel()
+        self.Status[0] = False
         Ventana.destroy()
 
     def obtenerAncho(self, Ventana, Proporcion, Ancho = None):
@@ -256,6 +266,8 @@ class Loggin():
 
     def detectarTecla(self, contenedor, event, contenido):
 
+        #Al soltar la tecla detecta el evento en caso de ser una barra de retroceso borra el ultimo elemento.
+
         if (event.keysym == "BackSpace"):
 
             try:  
@@ -267,6 +279,8 @@ class Loggin():
             teclaPresionada = event.char
             contenido.append(teclaPresionada)
 
+        #Es censurada la clave, susceptible de ser mejorada agarra todo el contenido y lo intercambia por ****
+
         contenidoOculto = "*" * len(contenido)
         contenedor.delete(0, END)
         contenedor.insert(0, contenidoOculto)
@@ -274,18 +288,60 @@ class Loggin():
     def boton(self, Frame, Ancho, Largo, primerEntry, segundoEntry):
 
         Frame.rowconfigure(0, weight = 1)
+        Frame.rowconfigure(1, weight = 0)
         Frame.columnconfigure(0, weight = 1)
 
-        boton = CTkButton(master = Frame,
+        primerEspacioAncho = self.obtenerAncho(Frame, 60, Ancho)    
+        primerEspacioLargo= self.obtenerLargo(Frame, 95, Largo)
+
+        primerEspacio = CTkFrame(master = Frame, 
+                                 width = primerEspacioAncho,
+                                 height = primerEspacioLargo,
+                                 )
+        
+        primerEspacio.grid(row = 0, column = 0)
+
+        primerEspacio.rowconfigure(0, weight = 1)
+        primerEspacio.columnconfigure(0, weight = 1)
+
+        boton = CTkButton(master = primerEspacio,
                           text = "Iniciar Sesión",
                           font = ("Helvetica", 16),
                           text_color = self.colorFondo,
                           fg_color = self.amarillo,
                           command = lambda : self.mandarInformacion(primerEntry, segundoEntry),
-                          width = self.obtenerAncho(Frame, 60, Ancho),
-                          height = self.obtenerLargo(Frame, 60, Largo))
+                          width = self.obtenerAncho(Frame, 100, primerEspacioAncho),
+                          height = self.obtenerLargo(Frame, 57, primerEspacioLargo))
         
         boton.grid(row = 0, column = 0)
+
+        primerEspacioAncho = self.obtenerAncho(Frame, 100, Ancho)    
+        primerEspacioLargo= self.obtenerLargo(Frame, 5, Largo)
+
+        segundoEspacio = CTkFrame(master = Frame, 
+                                 width = primerEspacioAncho,
+                                 height = primerEspacioLargo,
+                                 fg_color = self.colorFondo,
+                                 )       
+
+        segundoEspacio.grid(row = 1, column = 0, sticky = "nsew") 
+
+        segundoEspacio.rowconfigure(0, weight = 1)
+        segundoEspacio.columnconfigure(0, weight = 1)
+
+        Imagen = CTkImage(light_image = Image.open("Frontend/Imagenes/Retornar.png"), 
+                          dark_image = Image.open("Frontend/Imagenes/Retornar.png"),
+                          size=(20, 20))           
+            
+        regresar = CTkLabel(master = segundoEspacio,
+                            text = "Regresar ",
+                            font = ("Helvetica", 12),
+                            image = Imagen,
+                            compound = "right")
+        
+        regresar.bind("<Button - 1>", lambda event: self.regresar(Frame))
+        
+        regresar.grid(row = 1, column = 0, sticky = "se")
 
     def mandarInformacion(self, frameUsuario, frameClave):
         
