@@ -12,7 +12,7 @@ class Ventana():
 
             self.iniciar()
 
-    def iniciar(self, status = None):
+    def iniciar(self, status = None, repeticion = None):
 
         self.app = CTk()    
         self.Ancho = self.obtenerAncho(self.app, 60)
@@ -20,8 +20,8 @@ class Ventana():
     
         self.app.geometry(f"{self.Ancho}x{self.Largo}")
         self.app.title("SGBD Jalisco")
-        
-        #Verificamos la existencia de un loggin activo a fin de activar funcionalidades extras
+
+        self.app.after(201, lambda :self.app.iconbitmap('Frontend/Imagenes/Jalisco.ico'))
 
         self.Loggin = False
 
@@ -56,7 +56,7 @@ class Ventana():
         self.tercerFrameAncho = None
         self.tercerFrameLargo = None
 
-        if(self.Loggin == False):
+        if(repeticion == None):
 
             self.pantallaCarga(self.app)
 
@@ -473,7 +473,7 @@ class Ventana():
                            "edit -nombreTabla -id -valor" : "Edita un registro de la tabla",
                            "remove -nombreTabla -id" : "Remueve un registro de la tabla"}
 
-        #La identación tiene que ser desmenuzada y mejorada, dispone de demasiadas identaciones.
+        #La identación tiene que ser desmenuzada y mejorada, dispone de demasiadas identaciones
 
         if(comando == "help"):
 
@@ -606,7 +606,11 @@ class Ventana():
 
         if(Status[0] == True):
             
-            self.iniciar(True)
+            self.iniciar(True, 1)
+
+        else:
+
+            self.iniciar(False, 1)
 
     def opcionesMenu(self, opcion):
         
