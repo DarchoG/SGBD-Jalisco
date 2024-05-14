@@ -21,6 +21,8 @@ class Ventana():
         self.app.geometry(f"{self.Ancho}x{self.Largo}")
         self.app.title("SGBD Jalisco")
         
+        #Verificamos la existencia de un loggin activo a fin de activar funcionalidades extras
+
         self.Loggin = False
 
         if(status == True):
@@ -134,6 +136,8 @@ class Ventana():
 
         barraCarga.set(0)
 
+        #La barra de progreso es inicializada en 0, la funcion de comprobacion definida que actualizara en determinado tiempo el contenido de la misma.
+
         def barraProgreso():
 
             valor = barraCarga.get()
@@ -243,6 +247,8 @@ class Ventana():
        Frame.columnconfigure(0, weight=0)
        Frame.columnconfigure(1, weight=1)
 
+       #Opciones dispinbles para la navegacion del usuario.
+
        valores = ["Opciones", "Diagramas", "Regresiones", "Intervalos Confianza", "Importar", "Exportar" , "Salir"]
 
        primerAjuste = CTkOptionMenu(Frame, values=valores, 
@@ -256,6 +262,8 @@ class Ventana():
 
        Usuario = CTkLabel(Frame, text="Usuario   ", anchor="e")
        Usuario.grid(row=0, column=1, sticky = "ew")
+
+        #En caso de disponer de un loggin activo desaparecemos el boton que habilita dicha funcionalidad
 
        self.logginActivo(Frame, Usuario)
 
@@ -321,6 +329,8 @@ class Ventana():
         
         basesDatos.grid(row = 1, column = 0, sticky = "nsew", pady = 10)
 
+        #Problemas diferentes a la gestion del widget, fue optado sustituirlo por botones estrandar.
+
         '''
         basesDatos = CTkScrollableFrame(master = Frame,
                               width = basesDatosAncho,
@@ -337,7 +347,7 @@ class Ventana():
 
         Tablas = Conexion.tablas()
 
-        for i in range(7): # Tengo más elementos en al consulta SQL
+        for i in range(7): # Tengo más elementos en al consulta SQL, no obstante los primeros 7 son los que me interesan.
          
             basesDatos.rowconfigure(i, weight = 1)
             
@@ -359,6 +369,8 @@ class Ventana():
         Frame.rowconfigure(0, weight = 1)
         Frame.columnconfigure(0, weight = 1)
 
+        #Texto default del contenedor principal, es removido ante cualquier input que requiera el espacio.
+
         Imagen = CTkImage(light_image = Image.open("Frontend/Imagenes/Stock.png"), 
                           dark_image = Image.open("Frontend/Imagenes/Stock.png"),
                           size=(self.obtenerLargoWidget(Frame, 50), self.obtenerLargoWidget(Frame, 50)))
@@ -377,6 +389,8 @@ class Ventana():
         Texto.grid(row = 0, column = 0,  sticky="nswe")
 
     def consultar(self, nombreTabla):
+
+        #Ejecutamos el script que retorna la informacion de los registros y eliminamos el contenido previo.
 
         Tablas = Conexion.mostrar_registros(nombreTabla)
         Contenido = self.segundoSegundoFrame.winfo_children()
@@ -429,6 +443,8 @@ class Ventana():
 
     def Enter(self, event, cajaComandos):
 
+        #Obtenemos el texto ingresado.
+
         comando = cajaComandos.get(f"{self.posicionComandos}.0", "end-1c")
         self.ejecutarComando(cajaComandos, comando)
 
@@ -440,16 +456,24 @@ class Ventana():
 
     def ejecutarComando(self, cajaComandos, comando):
 
+        #Variable que permite saber si el codigo ejecutado fue exitoso.
+
         Bandera = [True]
+
+        #Comandos de uso general
 
         comandosDisponibles = { "cls" : "Borra toda la terminal",
                                "exit" : "Salir",
                                "restart" : "Reiniciar",}
         
+        #Comandos de caracter privado
+
         comandosLoggin = { "----------- " : "-----------",
                            "add -nombreTabla " : "Agrega un registro a una tabla",
                            "edit -nombreTabla -id -valor" : "Edita un registro de la tabla",
                            "remove -nombreTabla -id" : "Remueve un registro de la tabla"}
+
+        #La identación tiene que ser desmenuzada y mejorada, dispone de demasiadas identaciones.
 
         if(comando == "help"):
 
@@ -574,6 +598,9 @@ class Ventana():
     def loggin(self, Ventana):
 
         Status = [False]
+
+        #Al hacer click en el boton loggin se activa la presente funcion instanciado un nuevo objeto
+        #La varible Status es pasada por referencia mediante un objeto mutable para comprobar el estado del loggin.
 
         Loggin.Loggin(self.app, Status)
 
