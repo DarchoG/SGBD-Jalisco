@@ -38,3 +38,7 @@ pip install pillow
 
 pip install psycopg2
 ```
+
+## Interfaz
+
+https://github.com/DarchoG/SGBD-Jalisco/assets/159450603/9461dab8-a4ea-434f-bcd2-c9ce9d997b75
