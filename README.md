@@ -10,20 +10,14 @@ Ofrecer un **sistema experto susceptible de orientar en las decisiones presupues
 
 ## Características Implementadas:
 
-- [x] Interfaz
-
-- [x] Sistema Loggin
-
-- [x] Terminal
-
-- [x] Conexión Base Datos
-
-- [ ] Métodos Estadísticos
-
-- [ ] Sistema Experto
-
-- [ ] Importar/Exportar Archivos
-
+- ![checked](https://img.shields.io/badge/Completado-%23FFD422?style=flat-square) Interfaz
+- ![checked](https://img.shields.io/badge/Completado-%23FFD422?style=flat-square) Sistema Loggin
+- ![checked](https://img.shields.io/badge/Completado-%23FFD422?style=flat-square) Terminal
+- ![checked](https://img.shields.io/badge/Completado-%23FFD422?style=flat-square) Conexión Base Datos
+- ![unchecked](https://img.shields.io/badge/Pendiente-lightgrey?style=flat-square) Métodos Estadísticos
+- ![unchecked](https://img.shields.io/badge/Pendiente-lightgrey?style=flat-square) Sistema Experto
+- ![unchecked](https://img.shields.io/badge/Pendiente-lightgrey?style=flat-square) Importar/Exportar Archivos
+  
 > [!NOTE]
 > Gran parte del contenido de backend permenece sin implementación.
 
