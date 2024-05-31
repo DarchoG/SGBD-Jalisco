@@ -1,12 +1,19 @@
 ## **Sistema Gestor Bases Datos Jalisco**
 
+<p align="justify">
 Es un programa administrador de datos públicos referentes al estado de Jalisco, brinda de un interfaz amigable, susceptible de adaptarse a las pantallas de diferentes dispositivos, permite contemplar todos los registros almacenados de una base de datos, adicionalmente al loguearse adquiere la capacidad de agregar, modificar y eliminar registros.
+</p>
 
+<p align="justify">
 La interfaz se compone por una pantalla de carga, un menu general con diferentes opciones para realizar estadisticas, una terminal y el display correspondiente de la información, en adición del sistema de loggin, fue elaborado en python haciendo uso de la librería customtkinter que potencia y brinda de una mayor gama de elementos gráficos en conjunto de pillow para agregar imágenes.
+</p>
 
 ## Propósito
 
-Ofrecer un **sistema experto susceptible de orientar en las decisiones presupuestarias del estado** mostrando las correlaciones y relaciones entre los datos a fin de identificar tendencias más fuertes y mejorar la toma de decisiones. Permite importar registros y exportar las relaciones de datos empleadas.
+<p align="justify">
+Ofrecer un <b>sistema experto susceptible de orientar en las decisiones presupuestarias del estado</b> mostrando las correlaciones y relaciones entre los datos a fin de identificar tendencias más fuertes y mejorar la toma de decisiones. Permite importar registros y exportar las relaciones de datos empleadas.
+</p>
+
 
 ## Características Implementadas:
 
